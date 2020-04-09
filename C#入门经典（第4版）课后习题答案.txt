@@ -1,0 +1,3351 @@
+Exercise Solutions
+Chapter 1: Introducing C#
+No exercises.
+Chapter 2: Writing a C# Program
+No exercises.
+Chapter 3: Variables and Expressions
+Exercise 1
+	Q.	In the following code, how would you refer to the name great from code in the namespace fabulous?
+namespace fabulous
+{
+   // code in fabulous namespace
+}
+
+namespace super
+{
+   namespace smashing
+   {
+      // great name defined
+   }
+}
+	A.	
+super.smashing.great
+Exercise 2
+	Q.	Which of the following is not a legal variable name?
+	a.	myVariableIsGood
+	b.	99Flake
+	c.	_floor
+	d	time2GetJiggyWidIt
+	e	wrox.com
+	A.	
+	b.	Because it starts with a number, and,
+	e	Because it contains a full stop.
+Exercise 3
+	Q.	Is the string "supercalifragilisticexpialidocious" too big to fit in a string variable? Why?
+	A.	No, there is no theoretical limit to the size of a string that may be contained in a string variable.
+Exercise 4
+	Q.	By considering operator precedence, list the steps involved in the computation of the following expression:
+resultVar += var1 * var2 + var3 % var4 / var5;
+	A.	The * and / operators have the highest precedence here, followed by +, %, and finally +=. The precedence in the exercise can be illustrated using parentheses as follows:
+resultVar += (((var1 * var2) + var3) % (var4 / var5));
+Exercise 5
+	Q.	Write a console application that obtains four int values from the user and displays their product.
+	A.	
+      static void Main(string[] args)
+      {
+         int firstNumber, secondNumber, thirdNumber, fourthNumber;
+         Console.WriteLine("Give me a number:");
+         firstNumber = Convert.ToInt32(Console.ReadLine());
+         Console.WriteLine("Give me another number:");
+         secondNumber = Convert.ToInt32(Console.ReadLine());
+         Console.WriteLine("Give me another number:");
+         thirdNumber = Convert.ToInt32(Console.ReadLine());
+         Console.WriteLine("Give me another number:");
+         fourthNumber = Convert.ToInt32(Console.ReadLine());
+         Console.WriteLine("The product of {0}, {1}, {2}, and {3} is {4}.",
+                       firstNumber, secondNumber, thirdNumber, fourthNumber,
+                       firstNumber * secondNumber * thirdNumber * fourthNumber);
+      }
+		Note that Convert.ToInt32() is used here, which isn’t covered in the chapter.
+Chapter 4: Flow Control
+Exercise 1
+	Q.	If you have two integers stored in variables var1 and var2, what Boolean test can you perform to see if one or the other (but not both) is greater than 10?
+	A.	(var1 > 10) ^ (var2 > 10)
+Exercise 2
+	Q.	Write an application that includes the logic from Exercise 1, obtains two numbers from the user, and displays them, but rejects any input where both numbers are greater than 10 and asks for two new numbers.
+	A.	
+      static void Main(string[] args)
+      {
+         bool numbersOK = false;
+         double var1, var2;
+         var1 = 0;
+         var2 = 0;
+         while (!numbersOK)
+         {
+            Console.WriteLine("Give me a number:");
+            var1 = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Give me another number:");
+            var2 = Convert.ToDouble(Console.ReadLine());
+            if ((var1 > 10) ^ (var2 > 10))
+            {
+               numbersOK = true;
+            }
+            else
+            {
+               if ((var1 <= 10) && (var2 <= 10))
+               {
+                  numbersOK = true;
+               }
+               else
+               {
+                  Console.WriteLine("Only one number may be greater than 10.");
+               }
+            }
+         }
+         Console.WriteLine("You entered {0} and {1}.", var1, var2);
+      }
+		This can be performed better using different logic, for example:
+      static void Main(string[] args)
+      {
+         bool numbersOK = false;
+         double var1, var2;
+         var1 = 0;
+         var2 = 0;
+         while (!numbersOK)
+         {
+            Console.WriteLine("Give me a number:");
+            var1 = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Give me another number:");
+            var2 = Convert.ToDouble(Console.ReadLine());
+            if ((var1 > 10) && (var2 > 10))
+            {
+               Console.WriteLine("Only one number may be greater than 10.");
+            }
+            else
+            {
+               numbersOK = true;
+            }
+         }
+         Console.WriteLine("You entered {0} and {1}.", var1, var2);
+      }
+Exercise 3
+	Q.	What is wrong with the following code?
+int i;
+for (i = 1; i <= 10; i++) 
+{
+   if ((i % 2) = 0)
+      continue;
+   Console.WriteLine(i);
+}
+	A.	The code should read:
+int i;
+for (i = 1; i <= 10; i++) 
+{
+   if ((i % 2) == 0)
+      continue;
+   Console.WriteLine(i);
+}
+		Using the = assignment operator instead of the Boolean == operator is a common mistake.
+Exercise 4
+	Q.	Modify the Mandelbrot set application to reQuest image limits from the user and display the chosen section of the image. The current code outputs as many characters as will fit on a single line of a console application; consider making every image chosen fit in the same amount of space to maximize the viewable area.
+	A.	
+      static void Main(string[] args)
+      {
+         double realCoord, imagCoord;
+         double realMax = 1.77;
+         double realMin = -0.6;
+         double imagMax = -1.2;
+         double imagMin = 1.2;
+         double realStep;
+         double imagStep;
+         double realTemp, imagTemp, realTemp2, arg;
+         int iterations;
+         while (true)
+         {
+            realStep = (realMax - realMin) / 79;
+            imagStep = (imagMax - imagMin) / 48;
+            for (imagCoord = imagMin; imagCoord >= imagMax;
+                 imagCoord += imagStep)
+            {
+               for (realCoord = realMin; realCoord <= realMax;
+                    realCoord += realStep)
+               {
+                  iterations = 0;
+                  realTemp = realCoord;
+                  imagTemp = imagCoord; 
+                  arg = (realCoord * realCoord) + (imagCoord * imagCoord);
+                  while ((arg < 4) && (iterations < 40))
+                  {
+                     realTemp2 = (realTemp * realTemp) - (imagTemp * imagTemp)
+                        - realCoord;
+                     imagTemp = (2 * realTemp * imagTemp) - imagCoord;
+                     realTemp = realTemp2;
+                     arg = (realTemp * realTemp) + (imagTemp * imagTemp);
+                     iterations += 1;
+                  }
+                  switch (iterations % 4)
+                  {
+                     case 0:
+                        Console.Write(".");
+                        break;
+                     case 1:
+                        Console.Write("o");
+                        break;
+                     case 2:
+                        Console.Write("O");
+                        break;
+                     case 3:
+                        Console.Write("@");
+                        break;
+                  }
+               }
+               Console.Write("\n");
+            }
+            Console.WriteLine("Current limits:");
+            Console.WriteLine("realCoord: from {0} to {1}", realMin, realMax);
+            Console.WriteLine("imagCoord: from {0} to {1}", imagMin, imagMax);
+
+            Console.WriteLine("Enter new limits:");
+            Console.WriteLine("realCoord: from:");
+            realMin = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("realCoord: to:");
+            realMax = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("imagCoord: from:");
+            imagMin = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("imagCoord: to:");
+            imagMax = Convert.ToDouble(Console.ReadLine());
+         }
+      }
+Chapter 5: More About Variables
+Exercise 1
+	Q.	Which of the following conversions can’t be performed implicitly:
+	a.	int to short
+	b.	short to int
+	c.	bool to string
+	d.	byte to float
+	A.	Conversions a and c can’t be performed implicitly.
+Exercise 2
+	Q.	Give the code for a color enumeration based on the short type containing the colors of the rainbow plus black and white. Can this enumeration be based on the byte type?
+	A.	
+    enum color : short
+    {
+       Red, Orange, Yellow, Green, Blue, Indigo, Violet, Black, White
+    }
+		Yes, because the byte type can hold numbers between 0 and 255, so byte-based enumerations can hold 256 entries with individual values, or more if duplicate values are used for entries.
+Exercise 3
+	Q.	Modify the Mandelbrot set generator example from the last chapter to use the following struct for complex numbers:
+    struct imagNum
+    {
+       public double real, imag;
+    }
+	A.	
+      static void Main(string[] args)
+      {
+         imagNum coord, temp;
+         double realTemp2, arg;
+         int iterations;
+         for (coord.imag = 1.2; coord.imag >= -1.2; coord.imag -= 0.05)
+         {
+            for (coord.real = -0.6; coord.real <= 1.77; coord.real += 0.03)
+            {
+               iterations = 0;
+               temp.real = coord.real;
+               temp.imag = coord.imag; 
+               arg = (coord.real * coord.real) + (coord.imag * coord.imag);
+               while ((arg < 4) && (iterations < 40))
+               {
+                  realTemp2 = (temp.real * temp.real) - (temp.imag * temp.imag)
+                     - coord.real;
+                  temp.imag = (2 * temp.real * temp.imag) - coord.imag;
+                  temp.real = realTemp2;
+                  arg = (temp.real * temp.real) + (temp.imag * temp.imag);
+                  iterations += 1;
+               }
+               switch (iterations % 4)
+               {
+                  case 0:
+                     Console.Write(".");
+                     break;
+                  case 1:
+                     Console.Write("o");
+                     break;
+                  case 2:
+                     Console.Write("O");
+                     break;
+                  case 3:
+                     Console.Write("@");
+                     break;
+               }
+            }
+            Console.Write("\n");
+         }
+      }
+Exercise 4
+	Q.	Will the following code compile? Why?
+    string[] blab = new string[5]
+    string[5] = 5th string.
+	A.	No, for the following reasons:
+*	End of statement semicolons are missing.
+*	2nd line attempts to access a non-existent 6th element of blab.
+*	2nd line attempts to assign a string that isn’t enclosed in double quotes.
+Exercise 5
+	Q.	Write a console application that accepts a string from the user and outputs a string with the characters in reverse order.
+	A.	
+      static void Main(string[] args)
+      {
+         Console.WriteLine("Enter a string:");
+         string myString = Console.ReadLine();
+         string reversedString = "";
+         for (int index = myString.Length - 1; index >= 0; index--)
+         {
+            reversedString += myString[index];
+         }
+         Console.WriteLine("Reversed: {0}", reversedString);
+      }
+Exercise 6
+	Q.	Write a console application that accepts a string and replaces all occurrences of the string no with yes.
+	A.	
+      static void Main(string[] args)
+      {
+         Console.WriteLine("Enter a string:");
+         string myString = Console.ReadLine();
+         myString = myString.Replace("no", "yes");
+         Console.WriteLine("Replaced \"no\" with \"yes\": {0}", myString);
+      }
+Exercise 7
+	Q.	Write a console application that places double Quotes around each word in a string.
+	A.	
+      static void Main(string[] args)
+      {
+         Console.WriteLine("Enter a string:");
+         string myString = Console.ReadLine();
+         myString = "\"" + myString.Replace(" ", "\" \"") + "\"";
+         Console.WriteLine("Added double quotes areound words: {0}", myString);
+      }
+		Or using String.Split():
+      static void Main(string[] args)
+      {
+         Console.WriteLine("Enter a string:");
+         string myString = Console.ReadLine();
+         string[] myWords = myString.Split(' ');
+         Console.WriteLine("Adding double quotes areound words:");
+         foreach (string myWord in myWords)
+         {
+            Console.Write("\"{0}\" ", myWord);
+         }
+      }
+Chapter 6: Functions
+Exercise 1
+	Q.	The following two functions have errors. What are they?
+    static bool Write()
+    {
+       Console.WriteLine("Text output from function.");
+    }
+    static void myFunction(string label, params int[] args, bool showLabel)
+    {
+       if (showLabel)
+          Console.WriteLine(label);
+       foreach (int i in args)
+      Console.WriteLine("{0}", i);
+    }
+	A.	The first function has a return type of bool, but doesn’t return a bool value.
+		The second function has a params argument, but it isn’t at the end of the argument list.
+Exercise 2
+	Q.	Write an application that uses two command line arguments to place values into a string and an integer variable respectively, then display these values.
+	A.	
+      static void Main(string[] args)
+      {
+         if (args.Length != 2)
+         {
+            Console.WriteLine("Two arguments required.");
+            return;
+         }
+         string param1 = args[0];
+         int param2 = Convert.ToInt32(args[1]);
+         Console.WriteLine("String parameter: {0}", param1);
+         Console.WriteLine("Integer parameter: {0}", param2);
+      }
+		Note that this answer contains code that checks that 2 arguments have been supplied, which wasn’t part of the Question but seems logical in this situation.
+Exercise 3
+	Q.	Create a delegate and use it to impersonate the Console.ReadLine() function when asking for user input.
+	A.	
+   class Program
+   {
+      delegate string ReadLineDelegate();
+
+      static void Main(string[] args)
+      {
+         ReadLineDelegate readLine = new ReadLineDelegate(Console.ReadLine);
+         Console.WriteLine("Type a string:");
+         string userInput = readLine();
+         Console.WriteLine("You typed: {0}", userInput);
+      }
+   }
+Exercise 4
+	Q.	Modify the following struct to include a function that returns the total price of an order:
+    struct order
+    {
+       public string itemName;
+       public int    unitCount;
+       public double unitCost;
+    }
+	A.	
+    struct order
+    {
+       public string itemName;
+       public int    unitCount;
+       public double unitCost;
+    
+       public double TotalCost()
+       {
+          return unitCount * unitCost;
+       }
+    }
+Exercise 5
+	Q.	Add another function to the order struct that returns a formatted string as follows, where italic entries enclosed in angle brackets are replaced by appropriate values:
+    Order Information: <unit count> <item name> items at $<unit cost> each, total 
+    cost $<total cost>
+	A.	
+    struct order
+    {
+       public string itemName;
+       public int    unitCount;
+       public double unitCost;
+    
+       public double TotalCost()
+       {
+          return unitCount * unitCost;
+       }
+    
+       public string Info()
+       {
+          return "Order information: " + unitCount.ToString() + " " + itemName +
+                 " items at $" + unitCost.ToString() + " each, total cost $" +
+                 TotalCost().ToString();
+       }
+    }
+Chapter 7: Debugging and Error Handling
+Exercise 1
+	Q.	“Using Trace.WriteLine() is preferable to using Debug.WriteLine() because the Debug version only works in debug builds.” Do you agree with this statement? Why?
+	A.	This statement is only true for information that you want to make available in all builds. More often, you will want debugging information to be written out only when debug builds are used. In this situation, the Debug.WriteLine() version is preferable.
+		Using the Debug.WriteLine() version also has the advantage that it will not be compiled into release builds, thus reducing the size of the resultant code.
+Exercise 2
+	Q.	Provide code for a simple application containing a loop that generates an error after 5000 cycles. Use a breakpoint to enter Break mode just before the error is caused on the 5000th cycle. (Note: a simple way to generate an error is to attempt to access a nonexistent array element, such as myArray[1000] in an array with a hundred elements.)
+	A.	
+      static void Main(string[] args)
+      {
+         for (int i = 1; i < 10000; i++)
+         {
+            Console.WriteLine("Loop cycle {0}", i);
+            if (i == 5000)
+            {
+               Console.WriteLine(args[999]);
+            }
+         }
+      }
+		In VS, a breakpoint could be placed on the following line:
+            Console.WriteLine("Loop cycle {0}", i);
+		The properties of the breakpoint should be modified such that the hit count criterion is “break when hit count is equal to 5000.”
+		In VCE, a breakpoint could be placed on the line that causes the error because you cannot modify the properties of breakpoints in VCE in this way.
+Exercise 3
+	Q.	“finally code blocks execute only if a catch block isn’t executed.” True or false?
+	A.	False. finally blocks always execute. This may occur after a catch block has been processed.
+Exercise 4
+	Q.	Given the enumeration data type orientation defined in the following code, write an application that uses Structured Exception Handling (SEH) to cast a byte type variable into an orientation type variable in a safe way. (Note: you can force exceptions to be thrown using the checked keyword, an example of which is shown here. This code should be used in your application.)
+    enum orientation : byte
+    {
+       north = 1,
+       south = 2,
+       east  = 3,
+       west  = 4
+    }
+
+    myDirection = checked((orientation)myByte);
+	A.	
+      static void Main(string[] args)
+      {
+         orientation myDirection;
+         for (byte myByte = 2; myByte < 10; myByte++)
+         {
+            try
+            {
+               myDirection = checked((orientation)myByte);
+               if ((myDirection < orientation.north) ||
+                   (myDirection > orientation.west))
+               {
+                  throw new ArgumentOutOfRangeException("myByte", myByte,
+                     "Value must be between 1 and 4");
+               }
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+               // If this section is reached then myByte < 1 or myByte > 4.
+               Console.WriteLine(e.Message);
+               Console.WriteLine("Assigning default value, orientation.north.");
+               myDirection = orientation.north;
+            }
+         
+            Console.WriteLine("myDirection = {0}", myDirection);
+         }
+      }
+		This is a bit of a trick question. Because the enumeration is based on the byte type any byte value may be assigned to it, even if that value isn’t assigned a name in the enumeration. In this code you generate your own exception if necessary.
+Chapter 8: Introduction to Object-Oriented Programming
+Exercise 1
+	Q.	Which of the following are real levels of accessibility in OOP?
+a.	Friend
+b.	Public
+c.	Secure
+d.	Private
+e.	Protected
+f.	Loose
+g.	Wildcard
+	A.	(b) public, (d) private, and (e) protected are real levels of accessibility.
+Exercise 2
+	Q.	 “You must call the destructor of an object manually, or it will waste memory.” True or False?
+	A.	False. You should never call the destructor of an object manually. The .NET runtime environment does this for you during garbage collection.
+Exercise 3
+	Q.	Do you need to create an object to call a static method of its class?
+	A.	No, you can call static methods without any class instances.
+Exercise 4
+	Q.	Draw a UML diagram similar to the ones shown in this chapter for the following classes and interface:
+*	An abstract class called HotDrink that has the methods Drink(), AddMilk(), and AddSugar(), and the properties Milk, and Sugar.
+*	An interface called ICup that has the methods Refill() and Wash(), and the properties Color and Volume.
+*	A class called CupOfCoffee that derives from HotDrink, supports the ICup interface, and has the additional property BeanType.
+*	A class called CupOfTea that derives from HotDrink, supports the ICup interface, and has the additional property LeafType.
+	A.	
+	[fgAA01.xxx]
+Exercise 5
+	Q.	Write some code for a function that would accept either of the two cup objects in the above example as a parameter. The function should call the AddMilk(), Drink(), and Wash() methods for and cup object it is passed.
+	A.	
+    static void ManipulateDrink(HotDrink drink)
+    {
+       drink.AddMilk();
+       drink.Drink();
+       ICup cupInterface = (ICup)drink;
+       cupInterface.Wash();
+    }
+		Note the explicit cast to ICup. This is necessary because HotDrink doesn’t support the ICup interface, but we know that the two cup objects that might be passed to this function do. However, this is dangerous because other classes deriving from HotDrink are possible, which might not support ICup, but could be passed to this function. To correct this, check to see if the interface is supported:
+    static void ManipulateDrink(HotDrink drink)
+    {
+       drink.AddMilk();
+       drink.Drink();
+       if (drink is ICup)
+       {
+          ICup cupInterface = drink as ICup;
+          cupInterface.Wash();
+       }
+    }
+		The is and as operators used here are covered in Chapter 11.
+Chapter 9: Defining Classes
+Exercise 1
+	Q.	What is wrong with the following code?
+    public sealed class MyClass
+    {
+       // Class members.
+    }
+    
+    public class myDerivedClass : MyClass
+    {
+       // Class members.
+    }
+	A.	myDerivedClass derives from MyClass, but MyClass is sealed and can’t be derived from.
+Exercise 2
+	Q.	How would you define a noncreatable class?
+	A.	By defining it as a static class or by defining all of its constructors as private.
+Exercise 3
+	Q.	Why are noncreatable classes still useful? How do you make use of their capabilities?
+	A.	Noncreatable classes can be useful through the static members they possess. In fact, you can even get instances of these classes through these members. Here’s an example:
+    class CreateMe
+    {
+       private CreateMe()
+       {
+       }
+    
+       static public CreateMe GetCreateMe()
+       {
+          return new CreateMe();
+       }
+    }
+		Here the public constructor has access to the private constructor as it is part of the same class definition.
+Exercise 4
+	Q.	Write code in a class library project called Vehicles that implements the Vehicle family of objects discussed earlier in this chapter, in the section on interfaces versus abstract classes. There are nine objects and two interfaces that reQuire implementation.
+	A.	For simplicity, the following class definitions are shown as part of a single code file rather than listing a separate code file for each.
+    namespace Vehicles
+    {
+       public abstract class Vehicle
+       {
+       }
+       public abstract class Car : Vehicle
+       {
+       }
+       public abstract class Train : Vehicle
+       {
+       }
+       public interface IPassengerCarrier
+       {
+       }
+       public interface IHeavyLoadCarrier
+       {
+       }
+       public class SUV : Car, IPassengerCarrier
+       {
+       }
+       public class Pickup : Car, IPassengerCarrier, IHeavyLoadCarrier
+       {
+       }
+       public class Compact : Car, IPassengerCarrier
+       {
+       }
+       public class PassengerTrain : Train, IPassengerCarrier
+       {
+       }
+       public class FreightTrain : Train, IHeavyLoadCarrier
+       {
+       }
+       public class T424DoubleBogey : Train, IHeavyLoadCarrier
+       {
+       }
+    }
+Exercise 5
+	Q.	Create a console application project, Traffic, that references Vehicles.dll (created in Exercise 4). Include a function, AddPassenger(), that accepts any object with the IPassengerCarrier interface. To prove that the code works, call this function using instances of each object that supports this interface, calling the ToString() method inherited from System.Object on each one and writing the result to the screen.
+	A.	
+    using System;
+    using Vehicles;
+    
+    namespace Traffic
+    {
+       class Program
+       {
+          static void Main(string[] args)
+          {
+             AddPassenger(new Compact());
+             AddPassenger(new SUV());
+             AddPassenger(new Pickup());
+             AddPassenger(new PassengerTrain());
+          }
+    
+          static void AddPassenger(IPassengerCarrier Vehicle)
+          {
+             Console.WriteLine(Vehicle.ToString());
+          }
+       }
+    }
+Chapter 10: Defining Class Members
+Exercise 1
+	Q.	Write code that defines a base class, MyClass, with the virtual method GetString(). This method should return the string stored in the protected field myString, accessible through the write only public property ContainedString.
+	A.	
+class MyClass
+{
+   protected string myString;
+
+   public string ContainedString
+   {
+      set
+      {
+         myString = value;
+      }
+   }
+
+   public virtual string GetString()
+   {
+      return myString;
+   }
+}
+Exercise 2
+	Q.	Derive a class, MyDerivedClass, from MyClass. Override the GetString() method to return the string from the base class using the base implementation of the method, but add the text " (output from derived class)" to the returned string.
+	A.	
+class MyDerivedClass : MyClass
+{
+   public override string GetString()
+   {
+      return base.GetString() + " (output from derived class)";
+   }
+}
+Exercise 3
+	Q.	Partial method definitions must use the void return type. Give a reason why this might be so.
+	A.	If a method has a return type, then it is possible to use it as part of an expression; for example:
+x = Manipulate(y, z);
+		If no implementation is provided for a partial method, it will be removed by the compiler along with all places where it is used. In this code that would leave the result of x unclear because there is no replacement for the Manipulate() method available. It may be the case that without this method you would simply want to ignore the entire line of code, but the compiler is not capable of deciding whether this is what you’d want.
+		Methods with no return types are not called as part of expressions, so it is safe for the compiler to remove all references to the partial method calls.
+		Similarly, out parameters are forbidden because variables used as an out parameter must be undefined before the method call and will be defined after the method call. Removing the method call would break this behavior.
+Exercise 4
+	Q.	Write a class called MyCopyableClass that is capable of returning a copy of itself using the method GetCopy(). This method should use the MemberwiseClone() method inherited from System.Object. Add a simple property to the class, and write client code that uses the class to check that everything is working.
+	A.	
+class MyCopyableClass
+{
+   protected int myInt;
+
+   public int ContainedInt
+   {
+      get
+      {
+         return myInt;
+      }
+      set
+      {
+         myInt = value;
+      }
+   }
+
+    public MyCopyableClass GetCopy()
+   {
+      return (MyCopyableClass)MemberwiseClone();
+   }
+}
+		And the client code:
+class Class1
+{
+   static void Main(string[] args)
+   {
+      MyCopyableClass obj1 = new MyCopyableClass();
+      obj1.ContainedInt = 5;
+      MyCopyableClass obj2 = obj1.GetCopy();
+      obj1.ContainedInt = 9;
+      Console.WriteLine(obj2.ContainedInt);
+   }
+}
+		This code displays 5, showing that the copied object has its own version of the myInt field.
+Exercise 5
+	Q.	Write a console client for the Ch10CardLib library that draws 5 cards at a time from a shuffled Deck object. If all 5 cards are the same suit, then the client should display the card names on screen along with the text Flush!; otherwise it should Quit after 50 cards with the text No flush.
+	A.	
+using System;
+using Ch10CardLib;
+
+namespace Exercise_Answers
+{
+   class Class1
+   {
+      static void Main(string[] args)
+      {
+         while(true)
+         {
+            Deck playDeck = new Deck();
+            playDeck.Shuffle();
+            bool isFlush = false;
+            int flushHandIndex = 0;
+            for (int hand = 0; hand < 10; hand++)
+            {
+               isFlush = true;
+               Suit flushSuit = playDeck.GetCard(hand * 5).suit;
+               for (int card = 1; card < 5; card++)
+               {
+                  if (playDeck.GetCard(hand * 5 + card).suit != flushSuit)
+                  {
+                     isFlush = false;
+                  }
+               }
+               if (isFlush)
+               {
+                  flushHandIndex = hand * 5;
+                  break;
+               }
+            }
+            if (isFlush)
+            {
+               Console.WriteLine("Flush!");
+               for (int card = 0; card < 5; card++)
+               {
+                  Console.WriteLine(playDeck.GetCard(flushHandIndex + card));
+               }
+            }
+            else
+            {
+               Console.WriteLine("No flush.");
+            }
+            Console.ReadLine();
+         }
+      }
+   }
+}
+This code includes an endless loop because flushes are uncommon. You may need to press Enter several times before a flush is found in a shuffled deck. To verify that everything is working as it should, try commenting out the line that shuffles the deck.
+Chapter 11: Collections, Comparisons, and Conversions
+Exercise 1
+	Q.	Create a collection class called People that is a collection of the Person class shown below. The items in the collection should be accessible via a string indexer that is the name of the person, identical to the Person.Name property.
+public class Person
+{
+   private string name;
+   private int age;
+
+   public string Name
+   {
+      get
+      {
+         return name;
+      }
+      set
+      {
+         name = value;
+      }
+   }
+
+   public int Age
+   {
+      get
+      {
+         return age;
+      }
+      set
+      {
+         age = value;
+      }
+   }
+}
+	A.	
+using System;
+using System.Collections;
+
+namespace Exercise_Answers
+{
+   public class People : DictionaryBase
+   {
+      public void Add(Person newPerson)
+      {
+         Dictionary.Add(newPerson.Name, newPerson);
+      }
+
+      public void Remove(string name)
+      {
+         Dictionary.Remove(name);
+      }
+
+      public Person this[string name]
+      {
+         get
+         {
+            return (Person)Dictionary[name];
+         }
+         set
+         {
+            Dictionary[name] = value;
+         }
+      }
+   }
+}
+Exercise 2
+	Q.	Extend the Person class from the preceding exercise such that the >, <, >=, and <= operators are overloaded, and compare the Age properties of Person instances.
+	A.	
+public class Person
+{
+   private string name;
+   private int age;
+
+   public string Name
+   {
+      get
+      {
+         return name;
+      }
+      set
+      {
+         name = value;
+      }
+   }
+
+   public int Age
+   {
+      get
+      {
+         return age;
+      }
+      set
+      {
+         age = value;
+      }
+   }
+
+   public static bool operator >(Person p1, Person p2)
+   {
+      return p1.Age > p2.Age;
+   }
+
+   public static bool operator <(Person p1, Person p2)
+   {
+      return p1.Age < p2.Age;
+   }
+
+   public static bool operator >=(Person p1, Person p2)
+   {
+      return !(p1 < p2);
+   }
+
+   public static bool operator <=(Person p1, Person p2)
+   {
+      return !(p1 > p2);
+   }
+}
+Exercise 3
+	Q.	Add a GetOldest() method to the People class that returns an array of Person objects with the greatest Age property (1 or more objects, as multiple items may have the same value for this property), using the overloaded operators defined previously.
+	A.	
+   public Person[] GetOldest()
+   {
+      Person oldestPerson = null;
+      People oldestPeople = new People();
+      Person currentPerson;
+      foreach (DictionaryEntry p in Dictionary)
+      {
+         currentPerson = p.Value as Person;
+         if (oldestPerson == null)
+         {
+            oldestPerson = currentPerson;
+            oldestPeople.Add(oldestPerson);
+         }
+         else
+         {
+            if (currentPerson > oldestPerson)
+            {
+               oldestPeople.Clear();
+               oldestPeople.Add(currentPerson);
+               oldestPerson = currentPerson;
+            }
+            else
+            {
+               if (currentPerson >= oldestPerson)
+               {
+                  oldestPeople.Add(currentPerson);
+               }
+            }
+         }
+      }
+      Person[] oldestPeopleArray = new Person[oldestPeople.Count];
+      int copyIndex = 0;
+      foreach (DictionaryEntry p in oldestPeople)
+      {
+         oldestPeopleArray[copyIndex] = p.Value as Person;
+         copyIndex++;
+      }
+      return oldestPeopleArray;
+   }
+		This function is made more complex by the fact that no == operator has been defined for Person, but the logic can still be constructed without this. In addition, returning a People instance would be simpler, as it is easier to manipulate this class during processing. As a compromise, a People instance is used throughout the function, then converted into an array of Person instances at the end.
+Exercise 4
+	Q.	Implement the ICloneable interface on the People class to provide deep copying capability.
+	A.	
+public class People : DictionaryBase, ICloneable
+{
+   public object Clone()
+   {
+      People clonedPeople = new People();
+      Person currentPerson, newPerson;
+      foreach (DictionaryEntry p in Dictionary)
+      {
+         currentPerson = p.Value as Person;
+         newPerson = new Person();
+         newPerson.Name = currentPerson.Name;
+         newPerson.Age = currentPerson.Age;
+         clonedPeople.Add(newPerson);
+      }
+      return clonedPeople;
+   }
+
+   ...
+}
+This could be simplified by implementing ICloneable on the Person class.
+Exercise 5
+	Q.	Add an iterator to the People class that enables you to get the ages of all members in a foreach loop as follows:
+foreach (int age in myPeople.Ages)
+{
+   // Display ages.
+}
+	A.	
+   public IEnumerable Ages
+   {
+      get
+      {
+         foreach (object person in Dictionary.Values)
+            yield return (person as Person).Age;
+      }
+   }
+Chapter 12: Generics
+Exercise 1
+	Q.	Which of the following can be generic?
+a)	classes
+b)	methods
+c)	properties
+d)	operator overloads
+e)	structs
+f)	enumerations
+	A.	(a) classes, b (methods), and (c) properties.
+		(c) operator overloads and (d) structs cannot, although they can use generic type parameters supplied by the class containing them.
+		Enumerations (f) cannot.
+Exercise 2
+	Q.	Extend the Vector class in Ch12Ex01 such that the * operator returns the dot product of two vectors.
+The dot product of two vectors is defined as the product of their magnitudes multiplied by the cosine of the angle between them.
+	A.	
+      public static double? operator *(Vector op1, Vector op2)
+      {
+         try
+         {
+            double angleDiff = (double)(op2.ThetaRadians.Value –
+               op1.ThetaRadians.Value);
+            return op1.R.Value * op2.R.Value * Math.Cos(angleDiff);
+         }
+         catch
+         {
+            return null;
+         }
+      }
+Exercise 3
+	Q.	What is wrong with the following code? Fix it.
+public class Instantiator<T>
+{
+   public T instance;
+
+   public Instantiator()
+   {
+      instance = new T();
+   }
+}
+	A.	You can’t instantiate T without enforcing the new() constraint on it, which ensures that a public default constructor is available:
+public class Instantiator<T>
+   where T : new()
+{
+   public T instance;
+
+   public Instantiator()
+   {
+      instance = new T();
+   }
+}
+Exercise 4
+	Q.	What is wrong with the following code? Fix it.
+public class StringGetter<T>
+{
+   public string GetString<T>(T item)
+   {
+      return item.ToString();
+   }
+}
+	A.	The same generic type parameter, T, is used on both the generic class and generic method. You need to rename one or both; for example:
+public class StringGetter<U>
+{
+   public string GetString<T>(T item)
+   {
+      return item.ToString();
+   }
+}
+Exercise 5
+	Q.	Create a generic class called ShortCollection<T> that implements IList<T> and consists of a collection of items with a maximum size. This maximum size should be an integer that can be supplied to the constructor of ShortCollection<T>, or defaults to 10. The constructor should also be able to take an initial list of items via a List<T> parameter. The class should function exactly like Collection<T>, but throw an exception of type IndexOutOfRangeException if an attempt is made to add too many items to the collection, or if the List<T> passed to the constructor contains too many items.
+	A.	One way of doing this is as follows:
+public class ShortCollection<T> : IList<T>
+{
+   protected Collection<T> innerCollection;
+   protected int maxSize = 10;
+
+   public ShortCollection() : this(10)
+   {
+   }
+
+   public ShortCollection(int size)
+   {
+      maxSize = size;
+      innerCollection = new Collection<T>();
+   }
+
+   public ShortCollection(List<T> list) : this(10, list)
+   {
+   }
+
+   public ShortCollection(int size, List<T> list)
+   {
+      maxSize = size;
+      if (list.Count <= maxSize)
+      {
+         innerCollection = new Collection<T>(list);
+      }
+      else
+      {
+         ThrowTooManyItemsException();
+      }
+   }
+
+   protected void ThrowTooManyItemsException()
+   {
+      throw new IndexOutOfRangeException(
+         "Unable to add any more items, maximum size is " + maxSize.ToString()
+         + " items.");
+   }
+
+   #region IList<T> Members
+
+   public int IndexOf(T item)
+   {
+      return (innerCollection as IList<T>).IndexOf(item);
+   }
+
+   public void Insert(int index, T item)
+   {
+      if (Count < maxSize)
+      {
+         (innerCollection as IList<T>).Insert(index, item);
+      }
+      else
+      {
+         ThrowTooManyItemsException();
+      }
+   }
+
+   public void RemoveAt(int index)
+   {
+      (innerCollection as IList<T>).RemoveAt(index);
+   }
+
+   public T this[int index]
+   {
+      get
+      {
+         return (innerCollection as IList<T>)[index];
+      }
+
+      set
+      {
+         (innerCollection as IList<T>)[index] = value;
+      }
+   }
+
+   #endregion
+
+   #region ICollection<T> Members
+
+   public void Add(T item)
+   {
+      if (Count < maxSize)
+      {
+         (innerCollection as ICollection<T>).Add(item);
+      }
+      else
+      {
+         ThrowTooManyItemsException();
+      }
+   }
+
+   public void Clear()
+   {
+      (innerCollection as ICollection<T>).Clear();
+   }
+
+   public bool Contains(T item)
+   {
+      return (innerCollection as ICollection<T>).Contains(item);
+   }
+
+   public void CopyTo(T[] array, int arrayIndex)
+   {
+      (innerCollection as ICollection<T>).CopyTo(array, arrayIndex);
+   }
+
+   public int Count
+   {
+      get
+      {
+         return (innerCollection as ICollection<T>).Count;
+      }
+   }
+
+   public bool IsReadOnly
+   {
+      get
+      {
+         return (innerCollection as ICollection<T>).IsReadOnly;
+      }
+   }
+
+   public bool Remove(T item)
+   {
+      return (innerCollection as ICollection<T>).Remove(item);
+   }
+
+   #endregion
+
+   #region IEnumerable<T> Members
+
+   public IEnumerator<T> GetEnumerator()
+   {
+      return (innerCollection as IEnumerable<T>).GetEnumerator();
+   }
+
+   #endregion
+}
+Chapter 13: Additional OOP Techniques
+Exercise 1
+	Q.	Show the code for an event handler that uses the general purpose (object sender, EventArgs e) syntax that will accept either the Timer.Elapsed event or the Connection.MessageArrived event from the code earlier in this chapter. The handler should output a string specifying which type of event has been received, along with the Message property of the MessageArrivedEventArgs parameter or the SignalTime property of the ElapsedEventArgs parameter, depending on which event occurs.
+	A.	
+   public void ProcessEvent(object source, EventArgs e)
+   {
+      if (e is MessageArrivedEventArgs)
+      {
+         Console.WriteLine("Connection.MessageArrived event received.");
+         Console.WriteLine("Message: {0}",
+                          (e as MessageArrivedEventArgs).Message);
+      }
+      if (e is ElapsedEventArgs)
+      {
+         Console.WriteLine("Timer.Elapsed event received.");
+         Console.WriteLine("SignalTime: {0}",
+                           (e as ElapsedEventArgs ).SignalTime);
+      }
+   }
+
+   public void ProcessElapsedEvent(object source, ElapsedEventArgs e)
+   {
+      ProcessEvent(source, e);
+   }
+		Note that you need this extra ProcessElapsedEvent() method because the ElapsedEventHandler delegate cannot be cast to an EventHandler delegate. You don’t need to do this for the MessageHandler delegate because it has a syntax identical to EventHandler:
+   public delegate void MessageHandler(object source, EventArgs e);
+Exercise 2
+	Q.	Modify the card game example to check for the more interesting winning condition of the popular card game rummy. This means that a player wins the game if his hand contains two “sets” of cards, one of which consists of three cards, and one of which consists of four cards. A set is defined as either a sequence of cards of the same suit (such as 3H, 4H, 5H, 6H) or several cards of the same rank (such as 2H, 2D, 2S).
+	A.	Modify Player.cs as follows (there’s one modified method, two new ones, and comments in the code to explain the changes):
+public bool HasWon()
+{
+   // get temporary copy of hand, which may get modified.
+   Cards tempHand = (Cards)hand.Clone();
+
+   // find three and four of a kind sets
+   bool fourOfAKind = false;
+   bool threeOfAKind = false;
+   int fourRank = -1;
+   int threeRank = -1;
+
+   int cardsOfRank;
+   for (int matchRank = 0; matchRank < 13; matchRank++)
+   {
+      cardsOfRank = 0;
+      foreach (Card c in tempHand)
+      {
+         if (c.rank == (Rank)matchRank)
+         {
+            cardsOfRank++;
+         }
+      }
+      if (cardsOfRank == 4)
+      {
+         // mark set of four
+         fourRank = matchRank;
+         fourOfAKind = true;
+      }
+      if (cardsOfRank == 3)
+      {
+         // two threes means no win possible
+         // (threeOfAKind will only be true if this code
+         // has already executed)
+         if (threeOfAKind == true)
+         {
+            return false;
+         }
+         // mark set of three
+         threeRank = matchRank;
+         threeOfAKind = true;
+      }
+   }
+
+   // check simple win condition
+   if (threeOfAKind && fourOfAKind)
+   {
+      return true;
+   }
+
+   // simplify hand if three or four of a kind is found, by removing used cards
+   if (fourOfAKind || threeOfAKind)
+   {
+      for (int cardIndex = tempHand.Count - 1; cardIndex >= 0; cardIndex--)
+      {
+         if ((tempHand[cardIndex].rank == (Rank)fourRank)
+             || (tempHand[cardIndex].rank == (Rank)threeRank))
+         {
+            tempHand.RemoveAt(cardIndex);
+         }
+      }
+   }
+
+   // at this point the function may have returned, because:
+   // - a set of four and a set of three has been found, winning.
+   // - two sets of three have been found, losing.
+   // if the function hasn't returned then either:
+   // - no sets have been found, and tempHand contains 7 cards.
+   // - a set of three has been found, and tempHand contains 4 cards.
+   // - a set of four has been found, and tempHand contains 3 cards.
+
+   // find run of four sets, start by looking for cards of same suit in the same
+   // way as before
+   bool fourOfASuit = false;
+   bool threeOfASuit = false;
+   int fourSuit = -1;
+   int threeSuit = -1;
+
+   int cardsOfSuit;
+   for (int matchSuit = 0; matchSuit < 4; matchSuit++)
+   {
+      cardsOfSuit = 0;
+      foreach (Card c in tempHand)
+      {
+         if (c.suit == (Suit)matchSuit)
+         {
+            cardsOfSuit++;
+         }
+      }
+      if (cardsOfSuit == 7)
+      {
+         // if all cards are the same suit then two runs 
+         // are possible, but not definite.
+         threeOfASuit = true;
+         threeSuit = matchSuit;
+         fourOfASuit = true;
+         fourSuit = matchSuit;
+      }
+      if (cardsOfSuit == 4)
+      {
+         // mark four card suit.
+         fourOfASuit = true;
+         fourSuit = matchSuit;
+      }
+      if (cardsOfSuit == 3)
+      {
+         // mark three card suit.
+         threeOfASuit = true;
+         threeSuit = matchSuit;
+      }
+   }
+
+   if (!(threeOfASuit || fourOfASuit))
+   {
+      // need at least one run possibility to continue.
+      return false;
+   }
+
+   if (tempHand.Count == 7)
+   {
+      if (!(threeOfASuit && fourOfASuit))
+      {
+         // need a three and a four card suit.
+         return false;
+      }
+
+      // create two temporary sets for checking.
+      Cards set1 = new Cards();
+      Cards set2 = new Cards();
+
+      // if all 7 cards are the same suit...
+      if (threeSuit == fourSuit)
+      {
+         // get min and max cards
+         int maxVal, minVal;
+         GetLimits(tempHand, out maxVal, out minVal);
+         for (int cardIndex = tempHand.Count - 1; cardIndex >= 0; cardIndex--)
+         {
+            if (((int)tempHand[cardIndex].rank < (minVal + 3))
+                || ((int)tempHand[cardIndex].rank > (maxVal - 3)))
+            {
+               // remove all cards in a three card set that
+               // starts at minVal or ends at maxVal.
+               tempHand.RemoveAt(cardIndex);
+            }
+         }
+         if (tempHand.Count != 1)
+         {
+            // if more then one card is left then there aren't two runs.
+            return false;
+         }
+         if ((tempHand[0].rank == (Rank)(minVal + 3))
+             || (tempHand[0].rank == (Rank)(maxVal - 3)))
+         {
+            // if spare card can make one of the three card sets into a
+            // four card set then there are two sets.
+            return true;
+         }
+         else
+         {
+            // if spare card doesn't fit then there are two sets of three
+            // cards but no set of four cards.
+            return false;
+         }
+      }
+
+      // if three card and four card suits are different...
+      foreach (Card card in tempHand)
+      {
+         // split cards into sets.
+         if (card.suit == (Suit)threeSuit)
+         {
+            set1.Add(card);
+         }
+         else
+         {
+            set2.Add(card);
+         }
+      }
+      
+      // check if sets are sequential.
+      if (isSequential(set1) && isSequential(set2))
+      {
+         return true;
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   // if four cards remain (three of a kind found)
+   if (tempHand.Count == 4)
+   {
+      // if four cards remain then they must be the same suit.
+      if (!fourOfASuit)
+      {
+         return false;
+      }
+      // won if cards are sequential.
+      if (isSequential(tempHand))
+      {
+         return true;
+      }
+   }
+
+   // if three cards remain (four of a kind found)
+   if (tempHand.Count == 3)
+   {
+      // if three cards remain then they must be the same suit.
+      if (!threeOfASuit)
+      {
+         return false;
+      }
+      // won if cards are sequential.
+      if (isSequential(tempHand))
+      {
+         return true;
+      }
+   }
+   
+   // return false if two valid sets don't exist.
+   return false;
+}
+
+// utility function to get max and min ranks of cards
+// (same suit assumed)
+private void GetLimits(Cards cards, out int maxVal, out int minVal)
+{
+   maxVal = 0;
+   minVal = 14;
+   foreach (Card card in cards)
+   {
+      if ((int)card.rank > maxVal)
+      {
+         maxVal = (int)card.rank;
+      }
+      if ((int)card.rank < minVal)
+      {
+         minVal = (int)card.rank;
+      }
+   }
+}
+
+// utility function to see if cards are in a run
+// (same suit assumed)
+private bool isSequential(Cards cards)
+{
+   int maxVal, minVal;
+   GetLimits(cards, out maxVal, out minVal);
+   if ((maxVal - minVal) == (cards.Count - 1))
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+Chapter 14: C# 3.0 Language Enhancements
+Exercise 1
+	Q.	Why can't you use an object initializer with the following class? After modifying this class to enable you to use an object initializer, give an example of the code you would use to instantiate and initialize this class in one step.
+public class Giraffe
+{
+   public Giraffe(double neckLength, string name)
+   {
+      NeckLength = neckLength;
+      Name = name;
+   }
+   public double NeckLength {get; set;}
+   public string Name {get; set;}
+}
+	A.	To use an object initializer with a class, you must include a default, parameterless constructor. You could either add one to this class, or remove the non-default constructor that is there already. Once you have done this you could use the following code to instantiate and initialize this class in one step:
+Giraffe myPetGiraffe = new Giraffe
+{
+   NeckLength = "3.14",
+   Name = "Gerald"
+};
+Exercise 2
+	Q.	If you declare a variable of type var you will then be able to use it to hold any object type. Is this statement true or false?
+	A.	False. When you use the var keyword to declare a variable, the variable is still strongly typed; the compiler determines the type of the variable.
+Exercise 3
+	Q.	When you use anonymous types, how can you compare two instances to see if they contain the same data?
+	A.	You can use the Equals() method that is implemented for you. Note that you cannot use the == operator to do this as this compares variables to determine if they both refer to the same object.
+Exercise 4
+	Q.	The following code for an extension method contains an error, correct it.
+public string ToAcronym(this string inputString)
+{
+   inputString = inputString.Trim();
+   if (inputString == "")
+   {
+      return "";
+   }
+   string[] inputStringAsArray = inputString.Split(' ');
+   StringBuilder sb = new StringBuilder();
+   for (int i = 0; i < inputStringAsArray.Length; i++)
+   {
+      if (inputStringAsArray[i].Length > 0)
+      {
+         sb.AppendFormat("{0}", inputStringAsArray[i].Substring(0, 1).ToUpper());
+      }
+   }
+   return sb.ToString();
+}
+	A.	The extension method must be static:
+public static string ToAcronym(this string inputString)
+Exercise 5
+	Q.	How would you ensure that the extension method in Q4 was available to your client code?
+	A.	You must include the extension method in a static class that is accessible from the namespace that contains your client code. You could do this either by including the code in the same namespace, or by importing the namespace containing the class.
+Exercise 6
+	Q.	Rewrite the ToAcronym() method shown here as a single line of code. The code should ensure that strings including multiple spaces between words do not cause errors.
+		Hint: You will require the ?: tertiary operator, the string.Aggregate<string, string>() extension function, and a lambda expression to achieve this.
+	A.	One way to do this is as follows:
+public static string ToAcronym(this string inputString)
+{
+   return inputString.Trim().Split(' ').Aggregate<string, string>("", 
+      (a, b) => a + (b.Length > 0 ? b.ToUpper()[0].ToString() : ""));
+}
+		Here the tertiary operator is used to prevent multiple spaces causing errors. Note also that the version of Aggregate() with two generic type parameters is required as a seed value is required.
+Chapter 15: Basic Windows Programming
+Exercise 1
+	Q.	In previous versions of Visual Studio, it was quite difficult to get your own applications to display their controls in the style of the current Windows version. For this exercise, locate where, in a Windows Forms application, Visual styles are enabled in a new Windows Forms project. Experiment with enabling and disabling the styles and see how what you do affects the controls on the forms.
+	A.	The file Program.cs in a Windows Forms project contains the Main() method of the application. By default this method looks similar to this:
+    [STAThread]
+    static void Main()
+    {
+      Application.EnableVisualStyles();
+      Application.SetCompatibleTextRenderingDefault(false);
+      Application.Run(new Form1());
+    }
+		The line
+    Application.EnableVisualStyles();
+		Controls the visual style of the windows forms.
+Please note this line does nothing on Windows 2000.
+Exercise 2
+	Q..	Modify the TabControl example by adding a couple of tab pages and displaying a message box with the text: You changed the current tab to <Text of the current tab> from <Text of the tab that was just left>.
+	A.	The TabControl includes an event called SelectedIndexChanged that can be used to execute code when the user moves to another tab page.
+1.	In the Windows Form designer, select the TabControl and add two tabs to the control.
+2.	Name the tabs Tab Three and Tab Four
+3.	With the TabControl selected, add the event SelectedIndexChanged and go to the code window.
+4.	Enter the following code
+           private void tabControl1_SelectedIndexChanged(object sender,
+           EventArgs e)
+           {
+             string message = "You changed the current tab to '" +
+             tabControl1.SelectedTab.Text + "' from '" +
+             tabControl1.TabPages[mCurrentTabIndex].Text + "'";
+             mCurrentTabIndex = tabControl1.SelectedIndex;
+             MessageBox.Show(message);
+           }
+5.	Add the private field mCurrentTabIndex to the top of the class as such:
+           partial class Form1 : Form
+           {
+           private int mCurrentTabIndex = 0;
+6.	Run the application.
+		By default the first tab that is displayed in a TabControl has index 0. You use this by setting the private field mCurrentTabIndex to zero. In the SelectedIndexChanged method you build the message to display. This is done by using the property SelectedTab to get the Text property of the tab that was just selected and the TabPages collection to get the Text property of the tab pages specified by the mCurrentTabIndex field. After the message is built, the mCurrentTabIndex field is changed to point to the newly selected tab.
+Exercise 3
+	Q.	In the ListView example, you used the tag property to save the fully qualified path to the folders and files in the ListView. Change this behavior by creating a new class that is derived from ListViewItem and use instances of this new class as the items in the ListView. Store the information about the files and folders in the new class using a property named FullyQualifiedPath.
+	A.	By creating a class that is derived from the ListViewItem class you create something that can be used in place of the “intended” ListViewItem class. This means that, even though the ListView itself doesn’t know about the extra information on the class, you are able to store additional information on the items displayed in the ListView directly on the items.
+1.	Create a new class named FQListViewItem:
+           using System;
+           using System.Collections.Generic;
+           using System.Text;
+           using System.Windows.Forms;
+           
+           namespace ListView
+           {
+             class FQListViewItem : ListViewItem
+             {
+               private string mFullyQualifiedPath;
+               public string FullyQualifiedPath
+               {
+                 get { return mFullyQualifiedPath; }
+                 set { mFullyQualifiedPath = value; }
+               }
+             }
+           }
+2.	Find and change ListViewItem types to FQListViewItem types in the Form.cs file.
+3.	Find and change any reference to .Tag to .FullyQualifiedPath In the listViewFilesAndFoldes_ItemActivate method, cast the selected item in the second line to an FQListViewItem item as such:
+           string filename =
+            ((FQListViewItem)lw.SelectedItems[0]).FullyQualifiedPath;
+Chapter 16: Advanced Windows Forms Features 
+Exercise 1
+	Q.	Using the LabelTextbox example as the base, create a new property called MaxLength that stores the maximum number of characters that can be entered into the text box. Then create two new events called MaxLengthChanged and MaxLengthReached. The MaxLengthChanged event should be raised when the MaxLength property is changed, and MaxLengthReached should be raised when the user enters a character making the length of the text in the text box equal to the value of MaxLength.
+	A.	To accomplish this, you are going to make one new property and two events. Start by creating the property (private int mMaxLength = 32767):
+public int MaxLength
+{
+  get { return mMaxLength; }
+  set
+  {
+    if (value >= 0 && value <= 32767)
+    {
+      mMaxLength = value;
+      if (MaxLengthChanged != null)
+        MaxLengthChanged(this, new EventArgs());
+      txtLabelText.MaxLength = value;
+    }
+  }
+}
+		Next create the two new events:
+public event System.EventHandler MaxLengthChanged;
+public event System.EventHandler MaxLengthReached;
+		In the Form designer, select the TextBox and add an event handler for the TextChanged event. Here’s the code:
+private void txtLabelText_TextChanged(object sender, EventArgs e)
+{
+  if (txtLabelText.Text.Length >= mMaxLength)
+  {
+    if (MaxLengthReached != null)
+    MaxLengthReached(this, new EventArgs());
+  }
+}
+		The maximum length of the text in a normal TextBox is the size of an System.Int32 type, but the default is 32767 characters which normally is well beyond what is needed. In the property in step 2 above, you check to see if the value is negative or above 32767 and ignore the change request if it is. If the value is found to be acceptable, the MaxLength property of the TextBox is set and the event MaxLengthChanged is raised.
+		The event handler txtLabelText_TextChanged checks if the maximum number of characters in the TextBox is equal to or above the number specified in mMaxLength and raise the MaxLengthReached events if it is.
+Exercise 2
+	Q.	The StatusBars includes a property that allows the user to double-click on a field on the bar and trigger an event. Change the StatusBar example in such a way that the user can set bold, italic, and underline for the text by double-clicking on the status bar. Make sure that the display on the toolbar, menu, and status bar is always in sync by changing the text “Bold” to be bold when it is enabled and otherwise not. Do the same with Italic and Underlined.
+	A.	Start by selecting the three fields on the StatusBar and changing the value of Bold to false (unfold the Font property to do this). Change the DoubleClickEnabled property to true for each of the three. Double-click the Bold field and enter the following:
+private void ToolStripMenuItemBold_CheckedChanged(object sender, EventArgs e)
+{
+  this.ToolStripButtonBold.Checked = ToolStripMenuItemBold.Checked;
+}
+		Double-click the Italic field and enter this text:
+      private void ToolStripMenuItemItalic_CheckedChanged(object sender, EventArgs e)
+      {
+         this.ToolStripButtonItalic.Checked = ToolStripMenuItemItalic.Checked;
+      }
+		Double-click the Underline field and enter this text:
+      private void ToolStripMenuItemUnderline_CheckedChanged(object sender, EventArgs e)
+      {
+         this.ToolStripButtonUnderline.Checked = @@ta
+ToolStripMenuItemUnderline.Checked;
+      }
+		Change the three methods used in the above statements like this:
+      private void ToolStripButtonBold_CheckedChanged(object sender, EventArgs e)
+      {
+         Font oldFont;
+         Font newFont;
+
+         bool checkState = ((ToolStripButton)sender).Checked;
+
+         // Get the font that is being used in the selected text.
+         oldFont = this.richTextBoxText.SelectionFont;
+
+         if (!checkState)
+            newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Bold);
+         else
+            newFont = new Font(oldFont, oldFont.Style | FontStyle.Bold);
+
+         // Insert the new font and return focus to the RichTextBox.
+         this.richTextBoxText.SelectionFont = newFont;
+         this.richTextBoxText.Focus();
+
+         this.ToolStripMenuItemBold.CheckedChanged -= new @@ta
+
+EventHandler(ToolStripMenuItemBold_CheckedChanged);
+         this.ToolStripMenuItemBold.Checked = checkState;
+         this.ToolStripMenuItemBold.CheckedChanged += new @@ta
+EventHandler(ToolStripMenuItemBold_CheckedChanged);
+         //StatusBar
+         if (!checkState)
+            toolStripStatusLabelBold.Font = new Font@@ta
+(toolStripStatusLabelBold.Font, toolStripStatusLabelBold.Font.Style & @@ta
+~FontStyle.Bold);
+         else
+            toolStripStatusLabelBold.Font = new Font(toolStripStatusLabelBold.@@ta
+Font, toolStripStatusLabelBold.Font.Style | FontStyle.Bold);
+      }
+
+      private void ToolStripButtonItalic_CheckedChanged(object sender, EventArgs e)
+      {
+         Font oldFont;
+         Font newFont;
+
+         bool checkState = ((ToolStripButton)sender).Checked;
+
+         // Get the font that is being used in the selected text.
+         oldFont = this.richTextBoxText.SelectionFont;
+
+         if (!checkState)
+            newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Italic);
+         else
+            newFont = new Font(oldFont, oldFont.Style | FontStyle.Italic);
+
+         // Insert the new font.
+         this.richTextBoxText.SelectionFont = newFont;
+         this.richTextBoxText.Focus();
+
+         this.ToolStripMenuItemItalic.CheckedChanged -= new @@ta
+EventHandler(ToolStripMenuItemItalic_CheckedChanged);
+         this.ToolStripMenuItemItalic.Checked = checkState;
+         this.ToolStripMenuItemItalic.CheckedChanged += new @@ta
+EventHandler(ToolStripMenuItemItalic_CheckedChanged);
+
+         //StatusBar
+         if (!checkState)
+            toolStripStatusLabelItalic.Font = new @@ta
+Font(toolStripStatusLabelItalic.Font, toolStripStatusLabelItalic.Font.Style @@ta
+& ~FontStyle.Italic);
+         else
+            toolStripStatusLabelItalic.Font = new @@ta
+Font(toolStripStatusLabelItalic.Font, toolStripStatusLabelItalic.Font.Style @@ta
+| FontStyle.Italic);
+      }
+
+      private void ToolStripButtonUnderline_CheckedChanged(object sender, @@ta
+EventArgs e)
+      {
+         Font oldFont;
+         Font newFont;
+
+         bool checkState = ((ToolStripButton)sender).Checked;
+
+         // Get the font that is being used in the selected text.
+         oldFont = this.richTextBoxText.SelectionFont;
+
+         if (!checkState)
+            newFont = new Font(oldFont, oldFont.Style & ~FontStyle.Underline);
+         else
+            newFont = new Font(oldFont, oldFont.Style | FontStyle.Underline);
+
+         // Insert the new font.
+         this.richTextBoxText.SelectionFont = newFont;
+         this.richTextBoxText.Focus();
+
+         this.ToolStripMenuItemUnderline.CheckedChanged -= new @@ta
+EventHandler(ToolStripMenuItemUnderline_CheckedChanged);
+         this.ToolStripMenuItemUnderline.Checked = checkState;
+         this.ToolStripMenuItemUnderline.CheckedChanged += new @@ta
+EventHandler(ToolStripMenuItemUnderline_CheckedChanged);
+         toolStripStatusLabelUnderline.Enabled = checkState;
+
+         //StatusBar
+         if (!checkState)
+            toolStripStatusLabelUnderline.Font = new @@ta
+Font(toolStripStatusLabelUnderline.Font, toolStripStatusLabelUnderline.Font.@@ta
+Style & ~FontStyle.Underline);
+         else
+            toolStripStatusLabelUnderline.Font = new @@ta
+Font(toolStripStatusLabelUnderline.Font, toolStripStatusLabelUnderline.Font.@@ta
+Style | FontStyle.Underline);
+      }
+Chapter 17: Using Common Dialogs
+Exercise 1
+	Q.	Because the FontDialog and the ColorDialog work in a similar way to the other dialogs discussed in this chapter, it’s an easy job to add these dialogs to the Simple Editor application.
+		Let the user change the font of the text box. To make this possible add a new menu entry to the main menu: F&ormat, and a submenu for Format: &Font.... Add a handler to this menu item. Add a FontDialog to the application with the help of the Windows Forms designer. Display this dialog in the menu handler, and set the Font property of the text box to the selected font. 
+		You also have to change the implementation of the OnPrintPage() method to use the selected font for a printout. In the previous implementation you created a new Font object in the DrawString() method of the Graphics object. Now, use the font of the textBoxEdit object by accessing the Font property instead. You also have to be aware of a font location problem if the user chooses a big font. To avoid one line partly overwriting the one above/below, change the fixed value you used to change the vertical position of the lines. A better way to do this would be to use the size of the font to change the vertical increment: use the Height property of the Font class.
+	A.	 This is the code for the Click event handler of the Format | Font menu:
+      private void OnFormatFont(object sender, EventArgs e)
+      {
+         if (dlgFont.ShowDialog() == DialogResult.OK)
+         {
+            this.textBoxEdit.Font = dlgFont.Font;
+         }
+      }
+		You also have to change the implementation of the OnPrintPage() method to use the selected font for the printout. In the earlier implementation you created a new Font object in the DrawString() method of the Graphics object. Now, use the font of the textBoxEdit object by accessing the Font property instead. You also must be aware of a font location problem if the user chooses a big font. To avoid one line partly overwriting the one above or below, change the fixed value you used to change the vertical position of the lines. A better way to do this would be to use the size of the font to change the vertical increment: use the Height property of the Font class.
+		The code changes for OnPrintPage() are shown here:
+      private void OnPrintPage(object sender, 
+            System.Drawing.Printing.PrintPageEventArgs e)
+      {
+         int x = e.MarginBounds.Left;
+         int y = e.MarginBounds.Top;
+
+         while (linesPrinted < lines.Length)
+         {
+            e.Graphics.DrawString(lines[linesPrinted++],
+                       this.textBoxEdit.Font, Brushes.Black, x, y);
+            y += this.textBoxEdit.Font.Height + 3;
+            if (y >= e.MarginBounds.Bottom)
+            {
+               e.HasMorePages = true;
+               return;
+            }
+         }
+
+         linesPrinted = 0;
+         e.HasMorePages = false;
+      }
+Exercise 2
+	Q.	Another great extension to the Simple Editor application would be to change the font color. Add a second submenu to the Format menu entry: Color…. Add a handler to this menu entry where you open up a ColorDialog. If the user presses the OK button, set the selected color of the ColorDialog to the ForeColor property of the text box.
+		In the OnPrintPage() method make sure that the chosen color is used only if the printer supports colors. You can check the color support of the printer with the PageSettings.Color property of the PrintPageEventArgs argument. You can create a brush object with the color of the text box with this code:
+     Brush brush = new SolidBrush(textBoxEdit.ForeColor);
+		This brush can then be used as an argument in the DrawString() method instead of the black brush you used in the example before. 
+	A.	The Click event handler of the Format | Color menu is implemented in the method OnFormatColor():
+      private void OnFormatColor(object sender, EventArgs e)
+      {
+         if (dlgColor.ShowDialog() == DialogResult.OK)
+         {
+            this.textBoxEdit.ForeColor = this.dlgColor.Color;
+         }
+      }
+		For printing a Brush variable printBrush is declared as a member of the class SimpleEditorForm:
+    public partial class SimpleEditorForm : Form
+    {
+       private string fileName = "Untitled";
+ 
+       // Variables for printing
+       private string[] lines;
+       private int linesPrinted;
+       private Brush printBrush;
+		The method OnBeginPrint() that is invoked once for a print job allocates a SolidBrush object:
+      private void OnBeginPrint(object sender, PrintEventArgs e)
+      {
+         char[] param = { '\n' };
+
+         if (dlgPrint.PrinterSettings.PrintRange == PrintRange.Selection)
+         {
+            lines = textBoxEdit.SelectedText.Split(param);
+         }
+         else
+         {
+            lines = textBoxEdit.Text.Split(param);
+         }
+
+         int i = 0;
+         char[] trimParam = { '\r' };
+         foreach (string s in lines)
+         {
+            lines[i++] = s.TrimEnd(trimParam);
+         }
+
+         if (dlgPrint.PrinterSettings.SupportsColor)
+         {
+            printBrush = new SolidBrush(this.textBoxEdit.ForeColor);
+         }
+         else
+         {
+            printBrush = new SolidBrush(Color.Black);
+         }
+      }
+		The new brush is now used for printing in the OnPrintPage method:
+      private void OnPrintPage(object sender, 
+            System.Drawing.Printing.PrintPageEventArgs e)
+      {
+         int x = e.MarginBounds.Left;
+         int y = e.MarginBounds.Top;
+
+         while (linesPrinted < lines.Length)
+         {
+            e.Graphics.DrawString(lines[linesPrinted++],
+                       this.textBoxEdit.Font, printBrush, x, y);
+            y += this.textBoxEdit.Font.Height + 3;
+            if (y >= e.MarginBounds.Bottom)
+            {
+               e.HasMorePages = true;
+               return;
+            }
+         }
+
+         linesPrinted = 0;
+         e.HasMorePages = false;
+      }
+		Finally, the brush is disposed in the OnEndPrint() method:
+      private void OnEndPrint(object sender, PrintEventArgs e)
+      {
+         lines = null;
+         printBrush.Dispose();
+      }
+Chapter 18: Deploying Windows Applications
+Exercise 1
+	Q.	What are advantages of ClickOnce deployment?
+	A.	ClickOnce deployment has the advantage that the user installing the application doesn’t need administrator privileges. The application can be automatically installed by clicking on a hyperlink. Also, you can configure that new versions of the application can be installed automatically.
+Exercise 2
+	Q.	How are the required permissions defined with ClickOnce deployment?
+	A.	The required permissions can be found with the Calculate Permission feature in the project settings of Visual Studio.
+Exercise 3
+	Q.	What is defined with a ClickOnce manifest?
+	A.	The application manifest describes the application and required permissions, the deployment manifest describes deployment configuration such as update policies.
+Exercise 4
+	Q.	When is it necessary to use the Windows Installer?
+	A.	If administrator permissions are required by the installation program, the Windows Installer is needed instead of ClickOnce deployment.
+Exercise 5
+	Q.	What different editors can you use to create a Windows installer package using Visual Studio?
+	A.	File System Editor, Registry Editor, File Types Editor, User Interface Editor, Custom Actions Editor, Launch Condition Editor.
+Chapter 19: Basic Web Programming
+Exercise 1
+	Q.	Add the username to the top of the ASP.NET pages you created in this chapter. You can use the LoginName control for this task.
+	A.	The LoginName control can be prefixed with a “Hello, ”like this:
+<form id="form1" runat="server">
+<div>
+Hello, <asp:LoginName ID="LoginName1" runat="server" />
+</div>
+Exercise 2
+	Q.	Add a page for password recovery. Add a link to the Web page login.aspx, so that the user can recover the password if the login fails.
+	A.	Similar to the previously created page RegisterUser.aspx, the password recovery page must be placed into a directory where a username is not required, e.g. in the Intro directory. The page just needs the PasswordRecovery control included:
+<asp:PasswordRecovery ID="PasswordRecovery1" runat="server">
+</asp:PasswordRecovery>
+Exercise 3
+	Q.	Change the data source of the page Default.aspx page so that it uses the Events database for displaying the events.
+	A.	Add a SqlDataSource control to the page Default.aspx, and configure it to access the Events database:
+<asp:SqlDataSource ID="SqlDataSource1" runat="server"
+ConnectionString="<%$ ConnectionStrings:EventsConnectionString
+%>"
+SelectCommand="SELECT [Id], [Title] FROM [Events] ORDER BY
+[Title]"></asp:SqlDataSource>
+		With the drop-down list of the page, set the DataSourceId to the id of the data source, the DataTextField to Title, and the DataValueField to Id.
+Chapter 20: Advanced Web Programming
+Exercise 1
+	Q.	Create a new portal-style personal Web application.
+	A.	Create a new Web application in Visual Studio 2008 by selecting File@@>New@@>Web Site.
+Exercise 2
+	Q.	Create a user control to display your resume.
+	A.	Select the template Web User Control from the Add New Item dialog. The name of the user control must be set, e.g. Resume.ascx. Add text and HTML code for your resume.
+Exercise 3
+	Q.	Create a user control to display a list of links to your preferred Web sites.
+	A.	Use the same dialog and template as with exercise 2 to create a user control.
+		With this control add HTML code for a list and links to Websites as shown:
+<%@ Control Language="C#" AutoEventWireup="true"
+CodeFile="Links.ascx.cs" Inherits="Links" %>
+<ul>
+<li><a href="http://www.microsoft.com">Microsoft</a></li>
+<li><a href="http://www.thinktecture.com">Thinktecture</a></li>
+</ul>
+		Instead of using the <a> and <li> elements, you can use LinkButton controls and an HTML table.
+Exercise 4
+	Q.	Define Forms authentication as the authentication mechanism for the Web site.
+	A.	Forms authentication is defined by changing the authentication type with the ASP.NET configuration tool. For Forms authentication this configuration must be added to the file web.config:
+<system.web>
+<authentication mode="Forms" />
+</system.web>
+Exercise 5
+	Q.	Create a user control where a user can register to the Web site.
+	A.	Select the template Web User Control from the Add New Item dialog. Add a Register.ascx control that includes the CreateUserWizard control.
+Exercise 6
+	Q.	Create a master page that defines a common layout with top and bottom sections.
+	A.	Select the Master Page template with the Add New Item dialog. Add a table consisting of three rows and one column.
+Exercise 7
+	Q.	Define a sitemap to create links to all the Web pages with this Web site.
+	A.	Select the Site map template with the Add New Item dialog. The file Web.sitemap must be changed to include all Web pages in their hierarchy:
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+  <siteMapNode url="default.aspx" title="Home" description="">
+    <siteMapNode url="Demo.aspx" title="Demo" description="" />
+  </siteMapNode>
+</siteMap>
+		With the top of the master page, you can now add a SiteMapDataSource control and a Menu control to display the site map.
+Exercise 8
+	Q.	Create a Web page that's using the Web Parts framework where the user can define the layout of the page.
+	A.	Create a new Web page, and add a WebPartManager control. Add a table to define the layout of the page. Within every table cell where the user should add and configure WebParts, add a WebPartZone control. Add EditorZone and CatalogZone as appropriate.
+		For the user to allow changing the layout of Web Parts, the WebPartManager must be set to the display mode, e.g.:
+WebPartManager1.DisplayMode = WebPartManager.DesignDisplayMode;
+Chapter 21: Web Services
+Exercise 1
+	Q.	Create a new Web service named CinemaReservation.
+	A.	Create a new Web service in Visual Studio 2005 by selecting File@@>New@@>Web Site, and selecting the template ASP.NET Web Service.
+Exercise 2
+	Q	The ReserveSeatRequest and ReserveSeatResponse classes are needed to define the data sent to and from the Web service. The ReserveSeatRequest class needs a member Name of type string to send a name and two members of type int to send a request for a seat defined with Row and Seat. The class ReserveSeatResponse defines the data to be sent back to the client—that is, the name for the reservation and the seat that is really reserved.
+	A.	The classes should look similar to this code segment:
+public class ReserveSeatRequest
+{
+   public string Name { get; set; }
+   public int Row { get; set; }
+   public int Seat { get; set; }
+}
+
+public class ReserveSeatResponse
+{
+   public string ReservationName { get; set; }
+   public int Row { get; set; }
+   public int Seat { get; set; }
+}
+Exercise 3
+	Q.	Create a Web method ReserveSeat that requires a ReserveSeatRequest as a parameter and returns a ReserveSeatResponse. Within the implementation of the Web service, you can use a Cache object (see Chapter 19) to remember the seats that already have been reserved. If the seat that is requested is available, return the seat and reserve it in the Cache object. If it is not available, take the next free seat. For the seats in the Cache object you can use a two-dimensional array, as was shown in Chapter 5.
+	A.	For all the seats an array reservedSeats should be declared, so you can remember reserved seats:
+      private const int maxRows = 12;
+      private const int maxSeats = 16;
+      private bool[,] reservedSeats = new bool[maxRows, maxSeats];
+		The implementation of the Web service method can look similar to the code shown. If the requested seat is free, the seat is reserved and returned from the Web service. If the seat is not free, the next free seat is returned.
+   [WebMethod]
+   public ReserveSeatResponse ReserveSeat(ReserveSeatRequest req) 
+   {
+      ReserveSeatResponse resp = new ReserveSeatResponse();
+      resp.ReservationName = req.Name;
+      object o = HttpContext.Current.Cache["Cinema"];
+      if (o == null)
+      {
+         // fill seats with data from the database or a file...
+         HttpContext.Current.Cache["Cinema"] = reservedSeats;
+      }
+      else
+      {
+         reservedSeats = (bool[,])o;
+      }
+      if (reservedSeats[req.Row, req.Seat] == false)
+      {
+         reservedSeats[req.Row, req.Seat] = true;
+         resp.Row = req.Row;
+         resp.Seat = req.Seat;
+      }
+      else
+      {
+         int row;
+         int seat;
+         GetNextFreeSeat(out row, out seat);
+         resp.Row = row;
+         resp.Seat = seat;
+      }
+      return resp;
+   }
+Exercise 4
+	Q.	Create a Windows client application that uses the Web service to reserve a seat in the cinema.
+	A.	Create a new Windows application and add a reference to the Web service. The call to the Web service is shown here:
+      private void OnRequestSeat(object sender, EventArgs e)
+      {
+         CinemaService.ReserveSeatRequest req =
+               new CinemaClient.CinemaService.ReserveSeatRequest();
+         req.Name = textName.Text;
+         req.Seat = int.Parse(textSeat.Text);
+         req.Row = int.Parse(textRow.Text);
+
+         CinemaService.Service ws = new CinemaClient.CinemaService.Service();
+         CinemaService.ReserveSeatResponse resp =
+         ws.ReserveSeat(req);
+         MessageBox.Show(String.Format("Reserved seat {0} {1}", 
+               resp.Row, resp.Seat));
+      }
+Chapter 22: Ajax Programming
+Exercise 1
+	Q.	What control can you use to update only part of a Web page?
+	A.	You can use the UpdatePanel control to update only part of a Web page.
+Exercise 2
+	Q	If a Web page contains multiple UpatePanel controls, how do you prevent every region contained by an UpdatePanel control getting updated during a partial postback?
+	A.	The UpdateMode of the UpdatePanel controls is set to Always by default. You need to change this setting to Conditional.
+Exercise 3
+	Q.	How can you display an animated gif that should only be seen when a lengthy action is in progress?
+	A.	You can use the UpdateProgress control. With this control you can show any content, including animated gifs, to inform the user about a lengthy action.
+Exercise 4
+	Q.	What do you need to do to invoke a Web service directly from client script?
+	A.	You need to configure the Services property of the ScriptManager so that the  Web service is referenced. Then you can invoke the Web service directly from client script.
+Chapter 23: Deploying Web Applications
+Exercise 1
+	Q.	What is the difference between copying and publishing a Web application? When should you use what?
+	A.	Copying the Website copies all files required to run the Web application. Visual Studio 2008 has a dialog for a bi-directional copy. Newer files from the target server can be copied locally. If the source code should not be copied to the target Web server, publishing allows creating assemblies, and then you can copy just the assemblies to the target Web server.
+Exercise 2
+	Q.	When is using a Setup program preferred to copying a site?
+	A.	Copying the site requires that the virtual directory on the target server is already created. With a setup program it is possible to create the virtual directory on IIS during setup. Also, if assemblies should be installed in the GAC, or COM objects are needed is not solved by copying files. Here it is required to create a setup program.
+Exercise 3
+	Q.	What must be done before a Website can be published?
+	A.	A virtual directory must be created.
+Exercise 4
+	Q.	Publish the Web service from Chapter 21 to a virtual directory that you define with IIS.
+	A.	First use the IIS Management tool to create a Web application. Then use Visual Studio to copy the Web service files to the server.
+Chapter 24: File System Data
+Exercise 1
+	Q.	What is the namespace that enables an application to work with files?
+	A.	System.IO
+Exercise 2
+	Q.	When would you use a FileStream object to write to a file instead of using a StreamWriter object?
+	A.	When you need random access to files, or when you are not dealing with string data.
+Exercise 3
+	Q.	What methods of the StreamReader class allow you to read data from files and what does each one do?
+	A.	
+*	Peek()—Gets the value of the next character in the file, but does not advance the file position.
+*	Read()—Gets the value of the next character in the file and advances the file position.
+*	Read(char[] buffer, int index, int count)—Reads count characters into buffer, starting at buffer[index].
+*	ReadLine()—Gets a line of text.
+*	ReadToEnd()—Gets all text in a file.
+Exercise 4
+	Q.	What class would you use to compress a stream by using the Deflate algorithm?
+	A.	DeflateStream
+Exercise 5
+	Q.	How would you prevent a class you have created from being serialized?
+	A.	Ensure that it doesn’t possess the Serializable attribute.
+Exercise 6
+	Q.	What events does the FileSystemWatcher class expose and what are they for?
+	A.	
+*	Changed—Occurs when a file is modified.
+*	Created—Occurs when a file in created.
+*	Deleted—Occurs when a file is deleted.
+*	Renamed—Occurs when a file is renamed.
+Exercise 7
+	Q.	Modify the FileWatch application you built in this chapter. Add the capability to turn the file system monitoring on and off without exiting the application.
+	A.	Add a button that toggles the value of the watcher.EnableRaisingEvents property. The following code illustrates an event handler for a button called cmdStopWatch that would achieve this. This code also updates the UI to reflect the change.
+        private void cmdStopWatch_Click(object sender, EventArgs e)
+        {
+            watcher.EnableRaisingEvents = false;
+            lblWatch.Text = "No Longer Watching " + txtLocation.Text;
+            txtLocation.Text = "";
+            cmdWatch.Enabled = false;
+        }
+Chapter 25: XML
+Exercise 1
+	Q.	Change the Insert example in the “Creating Nodes” Try It Out section to insert an attribute called Pages with the value 1000 on the book node.
+	A.	
+1.	Double-click the Create Node button to go to the event handler doing the work.
+2.	Below the creation of the XmlComment, insert the following three lines:
+            XmlAttribute newPages = document.CreateAttribute("pages");
+            newPages.Value = "1000";
+            newBook.AppendChild(newPages);
+Exercise 2
+	Q.	Currently, the last example about XPath doesn’t have built-in capability to search for an attribute. Add a radio button and make a query for all books where the pages attribute of the book node equals 1000.
+	A.	
+1.	Add a new radio button to the form. Name it radioButtonSearchForPages and change the Text value to Search for pages.
+2.	Double-click on the new radio button and type the following code:
+          if (mCurrentNode != null)
+          {
+            mCurrentNode = mCurrentNode.SelectSingleNode("book[@pages=1000]");
+            ClearListBox();
+            RecurseXmlDocumentNoSiblings(mCurrentNode, 0);
+          }
+          else
+            ClearListBox();
+Exercise 3
+	Q.	Change the methods that write to the listbox (RecurseXmlDocument and RecurseXmlDocumentNoSiblings) in the XPath example so that they’re able to display attributes.
+	A.	Insert the following section in the if block in the method RecurseXmlDocument and RecurseXmlDocumentNoSiblings:
+         if (root is XmlElement) // Root is an XmlElement type
+         {
+            // First, print the name.
+            listBoxResult.Items.Add(root.Name.PadLeft(root.Name.Length + indent));
+
+            // Exercise 3: Check if the current node includes any Attributes
+            if (root.Attributes.Count > 0)
+            {
+               foreach (XmlAttribute attr in root.Attributes)
+               {
+                  string attrValue = attr.Name + " = '" + attr.Value + "'";
+                  listBoxResult.Items.Add(attrValue.PadLeft@@ta
+(attrValue.Length + indent));
+               }
+            }
+Chapter 26: Introduction to LINQ
+Exercise 1
+	Q.	Modify the first example program (26-1-FirstLINQquery) to order the results in descending order.
+	A.	
+static void Main(string[] args) 
+{
+          string[] names = { "Alonso", "Zheng", "Smith", "Jones", "Smythe", @@ta
+"Small", "Ruiz", "Hsieh", "Jorgenson", "Ilyich", "Singh", "Samba", "Fatimah" };
+
+            var queryResults =
+                from n in names
+                where n.StartsWith("S")
+ 	         orderby n descending
+                select n;
+        
+            Console.WriteLine("Names beginning with S:");
+
+            foreach (var item in queryResults) {
+                Console.WriteLine(item);
+            }
+
+           Console.Write("Program finished, press Enter/Return to continue:");@@ta
+            Console.ReadLine();
+}
+Exercise 2
+	Q.	Modify the number passed to the generateLotsOfNumbers() method in the large number program example (26-5-LargeNumberQuery) to create result sets of different sizes and see how query results are affected.
+	A.	Sets smaller than 5,000,000 have no numbers < 1000:
+    static void Main(string[] args)
+    {
+       int[] arraySizes = {     100,    1000,    10000,  100000,@@ta
+                            1000000, 5000000, 10000000, 50000000 };
+
+       foreach (int i in arraySizes) {
+           int[] numbers = generateLotsOfNumbers(i);
+           var queryResults = from n in numbers 
+                              where n < 1000 
+                              select n;
+           Console.WriteLine("number array size = {0}: Count(n < 1000) = {1}", 
+                    numbers.Length, queryResults.Count()
+           );
+       }
+
+       Console.Write("Program finished, press Enter/Return to continue:");
+       Console.ReadLine();
+   }
+Exercise 3
+	Q.	Add an orderby clause to the query in the large number program example (26-5-LargeNumberQuery) to see how this affects performance.
+	A.	Does not affect performance noticeably for n < 1000:
+        static void Main(string[] args)
+        {
+
+            int[] numbers = generateLotsOfNumbers(12345678);
+
+            var queryResults =
+                from n in numbers
+                where n < 1000
+                orderby n
+                select n
+               ;
+
+            Console.WriteLine("Numbers less than 1000:");
+            foreach (var item in queryResults)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.Write("Program finished, press Enter/Return to continue:");
+            Console.ReadLine();
+        }
+Exercise 4
+	Q.	Modify the query conditions in the large number program example (26-5-LargeNumberQuery) to select large and smaller subsets of the number list. How does this affect performance?
+	A.	Very large subsets such as n > 1000 instead of n < 1000 are very slow:
+        static void Main(string[] args)
+        {
+
+            int[] numbers = generateLotsOfNumbers(12345678);
+
+            var queryResults =
+                from n in numbers
+                where n > 1000
+                select n
+               ;
+
+            Console.WriteLine("Numbers less than 1000:");
+            foreach (var item in queryResults)
+            {
+                Console.WriteLine(item);
+            }
+
+            Console.Write("Program finished, press Enter/Return to continue:");
+            Console.ReadLine();
+        }
+Exercise 5
+	Q.	Modify the method syntax example (26-2-LINQMethodSyntax) to eliminate the where clause entirely. How much output does it generate?
+	A.	All the names are output because there is no query.
+static void Main(string[] args) 
+{
+          string[] names = { "Alonso", "Zheng", "Smith", "Jones", "Smythe", @@ta
+"Small", "Ruiz", "Hsieh", "Jorgenson", "Ilyich", "Singh", "Samba", "Fatimah" };
+
+            var queryResults = names;
+        
+
+            foreach (var item in queryResults) {
+                Console.WriteLine(item);
+            }
+
+            Console.Write("Program finished, press Enter/Return to continue:");@@ta
+            Console.ReadLine();
+}
+Exercise 6
+	Q.	Modify the query complex objects program example (26-7-QueryComplexObjects) to select a different subset of the query fields with a condition appropriate to that field.
+	A.	
+            var queryResults =
+                from c in customers
+                where c.Country == "USA"
+                select c
+               ;
+            Console.WriteLine("Customers in USA:");
+            foreach (Customer c in queryResults)
+            {
+                Console.WriteLine(c);
+            }
+Exercise 7
+	Q.	Add aggregate operators to the first example program (26-1-FirstLINQquery). Which simple aggregate operators are available for this non-numeric result set?
+	A.	
+        static void Main(string[] args)
+        {
+            string[] names = { "Alonso", "Zheng", "Smith", "Jones", "Smythe", @@ta
+"Small", "Ruiz", "Hsieh", "Jorgenson", "Ilyich", "Singh", "Samba", "Fatimah" };
+       // only Min() and Max() are available (if no lambda is used)@@ta
+       // for a result set like this consisting only of strings
+       Console.WriteLine("Min(names) = " + names.Min());@@ta
+       Console.WriteLine("Max(names) = " + names.Max());
+          var queryResults = @@ta
+                from n in names@@ta
+                where n.StartsWith("S")@@ta
+                select n;
+
+        Console.WriteLine("Query result: names starting with S");@@ta
+         foreach (var item in queryResults) @@ta
+         {@@ta
+                Console.WriteLine(item); @@ta
+         }
+
+        Console.WriteLine("Min(queryResults) = " + queryResults.Min());@@ta
+        Console.WriteLine("Max(queryResults) = " + queryResults.Max());
+
+         Console.Write("Program finished, press Enter/Return to continue:"); @@ta
+         Console.ReadLine();
+        }
+Chapter 27: LINQ to SQL
+Exercise 1
+	Q.	Use LINQ to SQL to display detail information from the Products and Employees tables in the Northwind database.
+	A.	
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+ 
+namespace BegVCSharp_27_exercise1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            NorthwindDataContext northWindDataContext = new NorthwindDataContext();
+
+            Console.WriteLine("Product Details");
+            var queryResults = from p in northWindDataContext.Products
+                               select new
+                               {
+                                   ID = p.ProductID,
+                                   Name = p.ProductName,
+                                   Price = p.UnitPrice,
+                                   Discontinued = p.Discontinued
+                               };
+            foreach (var item in queryResults)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("Employee Details");
+            var queryResults2 = from e in northWindDataContext.Employees
+                               select new
+                               {
+                                   ID = e.EmployeeID,
+                                   Name = e.FirstName+" "+e.LastName,
+                                   Title = e.Title
+                               };
+            foreach (var item in queryResults2)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine("Press Enter/Return to continue...");
+            Console.ReadLine();
+
+        }
+    }
+}         
+Exercise 2
+	Q.	Create a LINQ to SQL query to show the top-selling products in the Northwind database.
+	A.	Use code similar to this:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace BegVCSharp_27_exercise2
+{
+    class Program
+    {
+       static void Main(string[] args)
+       {
+          NorthwindDataContext northWindDataContext = new NorthwindDataContext();
+
+          Console.WriteLine("Top-Selling Products (Sales over $50,000)");
+          var queryResults = 
+           from p in northWindDataContext.Products
+           where p.Order_Details.Sum(od => od.Quantity * od.UnitPrice) > 50000
+           orderby p.Order_Details.Sum(od => od.Quantity * od.UnitPrice) descending
+           select new
+           {
+             ID = p.ProductID,
+             Name = p.ProductName,
+             TotalSales = p.Order_Details.Sum(od => od.Quantity * od.UnitPrice)
+           };
+           foreach (var item in queryResults)
+           {
+             Console.WriteLine(item);
+           }
+
+           Console.WriteLine("Press Enter/Return to continue...");
+           Console.ReadLine();
+        }
+    }
+}
+Exercise 3
+	Q.	Create a group query to show top-selling products by country.
+	A.	
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace BegVCSharp_27_exercise3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            NorthwindDataContext northWindDataContext = new NorthwindDataContext();
+
+            var totalResults = from od in northWindDataContext.Order_Details
+                               from c in northWindDataContext.Customers
+                               where c.CustomerID == od.Order.CustomerID
+                               select new
+                               {
+                                   Product = od.Product.ProductName,
+                                   Country = c.Country,
+                                   Sales = od.UnitPrice * od.Quantity 
+                               };
+
+            var groupResults =
+                from c in totalResults
+                group c by new { Product = c.Product, Country = c.Country } into cg
+                select new { 
+                    Product = cg.Key.Product, 
+                    Country = cg.Key.Country, 
+                    TotalSales = cg.Sum(c => c.Sales) 
+                }
+            ;
+
+            var orderedResults =
+                from cg in groupResults
+                orderby cg.Country, cg.TotalSales descending
+                select cg
+             ;
+
+            foreach (var item in orderedResults)
+            {
+                Console.WriteLine("{0,-12}{1,-20}{2,12}", 
+                  item.Country, item.Product, item.TotalSales.ToString("C2"));
+            }
+            Console.WriteLine("Press Enter/Return to continue...");
+            Console.ReadLine();
+
+        }
+    }
+}
+Exercise 4
+	Q.	Create a set of data-bound controls to edit product information for the Northwind data
+	A.	Create a Windows Form application, add a Northwind.dbml LINQ to SQL mapping class with the Products table, and then set up a data source using the LINQ to SQL class as described in the data binding example in Chapter 27 (BegVCSharp_27_2_LINQtoSQLDataBinding). Select the Products table in the data source and add a DataGridView for Products as shown in Figure A-2.
+Figure A-2
+1.	Add the following lines to the Form1 class in Form1.cs in the code editor:
+    public partial class Form1 : Form
+    {
+        NorthwindDataContext northwindDataContext = new NorthwindDataContext();
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            productBindingSource.DataSource = northwindDataContext.Products;
+        }
+    }
+2.	Double-click the Save button in the navigator bar in the Form1.cs design window, and then add the SubmitChanges() call to the handler method for the productBindingNavigatorSaveItem_Click event:
+private void productBindingNavigatorSaveItem_Click(object sender, EventArgs e)
+{
+        northwindDataContext.SubmitChanges();
+}
+3.	Compile and execute.
+Chapter 28: ADO.NET and LINQ over DataSet
+Exercise 1
+	Q.	Modify the program given in the first sample (DataReading) to use the Employees table in the Northwind database. Retrieve the EmployeeID and LastName columns. 
+	A.	Use this code:
+// Chapter28_Exercise_1
+using System;
+using System.Data;  // use ADO.NET namespace
+using System.Data.SqlClient; // use namespace for SQL Server .NET Data Provider
+
+namespace DataReading 
+{
+ class Program
+ {
+  static void Main(string[] args)
+  {
+   // Specify SQL Server-specific connection string
+   SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+
+
+   // Open connection
+   thisConnection.Open();
+
+   // Create command for this connection
+   SqlCommand thisCommand = thisConnection.CreateCommand();
+
+   // Specify SQL query for this command
+   thisCommand.CommandText =
+                 "SELECT EmployeeID, LastName FROM Employees";
+
+   // Execute DataReader for specified command
+   SqlDataReader thisReader = thisCommand.ExecuteReader();
+
+   // While there are rows to read
+   while (thisReader.Read())
+   {
+    // Output ID and name columns
+    Console.WriteLine("\t{0}\t{1}",
+    thisReader["EmployeeID"], thisReader["LastName"]);
+   }
+
+   // Close reader
+   thisReader.Close();
+
+   // Close connection
+   thisConnection.Close();
+
+   Console.Write("Program finished, press Enter/Return to continue:");
+   Console.ReadLine();
+
+  }
+ }
+}
+Exercise 2
+	Q.	Modify the first program showing the Update() method (UpdatingData) to change the company name back to Bottom-Dollar Markets. 
+	A.	Use the following code:
+// Chapter28_Exercise_2
+using System;
+using System.Data;            // Use ADO.NET namespace
+using System.Data.SqlClient;  // Use SQL Server data provider namespace
+
+namespace UpdatingData
+{
+ class Program
+ {
+  static void Main(string[] args)
+  {
+   // Specify SQL Server-specific connection string
+   SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+
+   // Create DataAdapter object for update and other operations
+   SqlDataAdapter thisAdapter = new SqlDataAdapter(
+     "SELECT CustomerID, CompanyName FROM Customers", thisConnection);
+
+   // Create CommandBuilder object to build SQL commands
+   SqlCommandBuilder thisBuilder = new SqlCommandBuilder(thisAdapter);
+   // Create DataSet to contain related data tables, rows, and columns
+   DataSet thisDataSet = new DataSet();
+
+   // Fill DataSet using query defined previously for DataAdapter
+   thisAdapter.Fill(thisDataSet, "Customers");
+
+   // Show data before change
+   Console.WriteLine("name before change: {0}",
+     thisDataSet.Tables["Customers"].Rows[9]["CompanyName"]);
+
+   // Change data in Customers table, row 9, CompanyName column
+            thisDataSet.Tables["Customers"].Rows[9]["CompanyName"] 
+                    = "Bottom-Dollar Markets";
+
+   // Call Update command to mark change in table
+   thisAdapter.Update(thisDataSet, "Customers");
+
+   Console.WriteLine("name after change: {0}",
+     thisDataSet.Tables["Customers"].Rows[9]["CompanyName"]);
+
+   thisConnection.Close();
+   Console.Write("Program finished, press Enter/Return to continue:");
+   Console.ReadLine();
+  }
+ }
+}
+Exercise 3
+	Q.	Write a program that asks the user for a Customer ID.
+	A.	
+using System;
+// use ADO.NET namespace
+using System.Data;
+// use SQL .NET Data Provider
+using System.Data.SqlClient;
+
+class Chapter28_Exercise_3
+{
+ public static void Main() 
+ {
+  // Specify SQL Server-specific connection string
+  SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+  // open connection
+  thisConnection.Open();
+  // create DataAdapter object for update and other operations
+   SqlDataAdapter thisAdapter = new  SqlDataAdapter( 
+   "SELECT CustomerID, CompanyName FROM Customers", thisConnection);
+  // create CommandBuilder object to build SQL commands
+   SqlCommandBuilder thisBuilder = new  SqlCommandBuilder(thisAdapter);
+  // create DataSet to contain related data tables, rows, and columns
+  DataSet thisDataSet = new DataSet();
+  // fill DataSet using query defined previously for DataAdapter
+  thisAdapter.Fill(thisDataSet, "Customers");
+
+  
+  Console.WriteLine("# rows before change: {0}",
+   thisDataSet.Tables["Customers"].Rows.Count);
+
+  // set up keys object for defining primary key
+  DataColumn[] keys = new DataColumn[1];
+  keys[0] = thisDataSet.Tables["Customers"].Columns["CustomerID"];
+  thisDataSet.Tables["Customers"].PrimaryKey = keys;
+
+  Console.WriteLine("Enter a 5-character Customer ID to Search for:");
+ // More validation logic could be added to the following, but this is @@ta
+the quickest solution
+ String customerID = Console.ReadLine();
+
+  DataRow findRow = thisDataSet.Tables["Customers"].Rows.Find(customerID);
+
+ if (findRow == null) 
+ {
+  Console.WriteLine("Customer ID {0} not found", customerID);
+ } 
+ else 
+ {
+  Console.WriteLine("Customer ID {0} already present in database", customerID);
+ }
+
+ thisConnection.Close();
+ }
+}
+Exercise 4
+	Q.	Write a program to create some orders for the customer Zachary Zithers; use the sample programs to view the orders.
+	A.	
+using System;
+// use ADO.NET namespace
+using System.Data;
+// use SQL Server .NET Data Provider
+using System.Data.SqlClient;
+
+class Chapter28_Exercise_4
+{
+ public static void Main() 
+ {
+ // connect to local Northwind database with SQL Server Express
+   SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+ // open connection
+ thisConnection.Open();
+ // create DataSet to contain related data tables, rows, and columns
+ DataSet thisDataSet = new DataSet();
+ // create DataAdapter object for customers
+  SqlDataAdapter custAdapter = new  SqlDataAdapter( 
+  "SELECT CustomerID, CompanyName FROM Customers", thisConnection);
+ // create CommandBuilder object to build SQL commands for customers
+  SqlCommandBuilder custBuilder = new  SqlCommandBuilder(custAdapter);
+ // fill DataSet using query defined previously for customers
+ custAdapter.Fill(thisDataSet, "Customers");
+
+ // create DataAdapter object for orders
+  SqlDataAdapter orderAdapter = new  SqlDataAdapter( 
+  "SELECT OrderID, CustomerID, Freight FROM Orders", thisConnection);
+ // create CommandBuilder object to build SQL commands for customers
+  SqlCommandBuilder orderBuilder = new  SqlCommandBuilder(orderAdapter);
+ // fill DataSet using query defined previously for customers
+ orderAdapter.Fill(thisDataSet, "Orders");
+
+ Console.WriteLine("# rows in Customers, Orders before change: {0}, {1}",
+  thisDataSet.Tables["Customers"].Rows.Count,
+  thisDataSet.Tables["Orders"].Rows.Count);
+
+ // set up keys object for defining primary key for customers
+ DataColumn[] cust_keys = new DataColumn[1];
+ cust_keys[0] = thisDataSet.Tables["Customers"].Columns["CustomerID"];
+ thisDataSet.Tables["Customers"].PrimaryKey = cust_keys;
+
+ // set up keys object for defining primary key for orders
+ DataColumn[] ord_keys = new DataColumn[1];
+ ord_keys[0] = thisDataSet.Tables["Orders"].Columns["OrderID"];
+ thisDataSet.Tables["Orders"].PrimaryKey = ord_keys;
+
+
+ // find ZACZI in customer table
+ if (thisDataSet.Tables["Customers"].Rows.Find("ZACZI") == null) 
+ {
+  Console.WriteLine("ZACZI not found, will add to Customers table");
+
+  DataRow custRow = thisDataSet.Tables["Customers"].NewRow();
+  custRow["CustomerID"] = "ZACZI";
+  custRow["CompanyName"] = "Zachary Zithers Ltd.";
+  thisDataSet.Tables["Customers"].Rows.Add(custRow);
+  Console.WriteLine("ZACZI successfully added to Customers table");
+
+  // find 12000 in order table
+  if (thisDataSet.Tables["Orders"].Rows.Find(12000) == null) 
+  {
+    DataRow orderRow = thisDataSet.Tables["Orders"].NewRow();
+    orderRow["OrderID"] = 12000;
+    orderRow["CustomerID"] = "ZACZI";
+    orderRow["Freight"] = 29.25;
+    thisDataSet.Tables["Orders"].Rows.Add(orderRow);
+    Console.WriteLine("Order # 12000 for Zachary Zithers successfully @@ta
+added to Orders table");
+  }
+  // find 12001 in order table
+  if (thisDataSet.Tables["Orders"].Rows.Find(12001) == null) 
+  {
+    DataRow orderRow = thisDataSet.Tables["Orders"].NewRow();
+    orderRow["OrderID"] = 12001;
+    orderRow["CustomerID"] = "ZACZI";
+    orderRow["Freight"] = 40.21;
+    thisDataSet.Tables["Orders"].Rows.Add(orderRow);
+    Console.WriteLine("Order # 12001 for Zachary Zithers successfully @@ta
+added to Orders table");
+  }
+ 
+ } 
+ else 
+ {
+  Console.WriteLine("ZACZI already present in database");
+ }
+
+ custAdapter.Update(thisDataSet, "Customers");
+ orderAdapter.Update(thisDataSet, "Orders");
+ Console.WriteLine("# rows in Customers, Orders after change: {0}, {1}",
+  thisDataSet.Tables["Customers"].Rows.Count,
+  thisDataSet.Tables["Orders"].Rows.Count);
+ thisConnection.Close();
+ }
+}
+Exercise 5
+	Q.	Write a program to display a different part of the relationship hierarchies in the Northwind database than the one used in this chapter; for example, Products, Suppliers, and Categories.
+	A.	Use the code shown here:
+using System; 
+// use ADO.NET namespace
+using System.Data;
+// use SQL Server .NET Data Provider
+using System.Data.SqlClient;
+
+class Chapter28_Exercise_5
+{
+ public static void Main() 
+ {
+ // connect to local Northwind database with SQL Server Express
+   SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+ // open connection
+ thisConnection.Open();
+
+ DataSet thisDataSet = new DataSet();
+
+  SqlDataAdapter prodAdapter = new  SqlDataAdapter(
+  "SELECT * FROM Products", thisConnection);
+ prodAdapter.Fill(thisDataSet, "Products");
+
+  SqlDataAdapter suppAdapter = new  SqlDataAdapter(
+  "SELECT * FROM Suppliers", thisConnection);
+ suppAdapter.Fill(thisDataSet, "Suppliers");
+
+  SqlDataAdapter catAdapter = new  SqlDataAdapter(
+  "SELECT * FROM Categories", thisConnection);
+ catAdapter.Fill(thisDataSet, "Categories");
+
+// Products is a child of Suppliers and Categories
+ DataRelation prodSuppRel = thisDataSet.Relations.Add("ProdSupp",
+  thisDataSet.Tables["Suppliers"].Columns["SupplierID"],
+  thisDataSet.Tables["Products"].Columns["SupplierID"]
+  );
+ DataRelation prodCatRel = thisDataSet.Relations.Add("ProdCat",
+  thisDataSet.Tables["Categories"].Columns["CategoryID"],
+  thisDataSet.Tables["Products"].Columns["CategoryID"]
+  );
+
+ foreach (DataRow prodRow in thisDataSet.Tables["Products"].Rows)
+ {
+  Console.WriteLine("Product ID: " + prodRow["ProductID"]);
+  Console.WriteLine("Product Name: " + prodRow["ProductName"]);
+
+  DataRow suppRow = prodRow.GetParentRow(prodSuppRel);
+  
+  Console.WriteLine("\tSupplier ID: " + suppRow["SupplierID"]);
+  Console.WriteLine("\tSupplier Name: " + suppRow["CompanyName"]);
+  
+  DataRow catRow = prodRow.GetParentRow(prodCatRel);
+  
+  Console.WriteLine("\tCategory ID: " + catRow["CategoryID"]);
+  Console.WriteLine("\tCategory Name: " + catRow["CategoryName"]);
+ }
+
+ thisConnection.Close();
+ }
+}
+Exercise 6
+	Q.	Write out the data generated in the previous exercise as an XML document.
+	A.	
+using System;
+// use ADO.NET namespace
+using System.Data;
+// use SQL Server .NET Data Provider
+using System.Data.SqlClient;
+
+class Chapter28_Exercise_6
+{
+ public static void Main() 
+ {
+ // connect to local Northwind database with SQL Server Express
+   SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+ // open connection
+ thisConnection.Open();
+
+ DataSet thisDataSet = new DataSet();
+
+ SqlDataAdapter prodAdapter = new SqlDataAdapter(
+  "SELECT * FROM Products", thisConnection);
+ prodAdapter.Fill(thisDataSet, "Products");
+
+ SqlDataAdapter suppAdapter = new SqlDataAdapter(
+  "SELECT * FROM Suppliers", thisConnection);
+ suppAdapter.Fill(thisDataSet, "Suppliers");
+
+ SqlDataAdapter catAdapter = new SqlDataAdapter(
+  "SELECT * FROM Categories", thisConnection);
+ catAdapter.Fill(thisDataSet, "Categories");
+ // see diagram at beginning of "More Tables" section of Chapter 28;
+ // Products is a child of Suppliers and Categories
+ DataRelation prodSuppRel = thisDataSet.Relations.Add("ProdSupp",
+  thisDataSet.Tables["Suppliers"].Columns["SupplierID"],
+  thisDataSet.Tables["Products"].Columns["SupplierID"]
+  );
+ prodSuppRel.Nested = true;
+
+ DataRelation prodCatRel = thisDataSet.Relations.Add("ProdCat",
+  thisDataSet.Tables["Categories"].Columns["CategoryID"],
+  thisDataSet.Tables["Products"].Columns["CategoryID"]
+  );
+ // only one of supplier/category can be nested as both are parents
+ // prodCatRel.Nested=true;
+
+ // write data to XML file)
+ thisDataSet.WriteXml(@"c:\northwind\nwindprod.xml");
+
+ thisConnection.Close();
+ }
+}
+Exercise 7
+	Q.	Change the program used to print all customer order details and products to use a WHERE clause in the SELECT statement for Customers limiting the customers processed.
+	A.	
+using System;
+// use ADO.NET namespace
+using System.Data;
+// use SQL Server .NET Data Provider
+using System.Data.SqlClient;
+
+class Chapter28_Exercise_7
+{
+ public static void Main() 
+ {
+ // connect to local Northwind database with SQL Server Express
+   SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+ // open connection
+ thisConnection.Open();
+ // create DataSet to contain related data tables, rows, and columns
+ DataSet thisDataSet = new DataSet();
+ SqlDataAdapter custAdapter = new SqlDataAdapter(
+  "SELECT * FROM Customers WHERE CustomerID = 'ALFKI'", thisConnection);
+ custAdapter.Fill(thisDataSet, "Customers");
+ SqlDataAdapter orderAdapter = new SqlDataAdapter(
+  "SELECT * FROM Orders WHERE CustomerID = 'ALFKI'", thisConnection);
+ orderAdapter.Fill(thisDataSet, "Orders");
+ SqlDataAdapter detailAdapter = new SqlDataAdapter(
+  "SELECT * FROM [Order Details] WHERE OrderID IN (SELECT OrderID FROM @@ta
+Orders WHERE CustomerID = 'ALFKI')", thisConnection);
+ detailAdapter.Fill(thisDataSet, "Order Details");
+
+ SqlDataAdapter prodAdapter = new SqlDataAdapter(
+  "SELECT * FROM Products", thisConnection);
+ prodAdapter.Fill(thisDataSet, "Products");
+
+ DataRelation custOrderRel = thisDataSet.Relations.Add("CustOrders",
+  thisDataSet.Tables["Customers"].Columns["CustomerID"],
+  thisDataSet.Tables["Orders"].Columns["CustomerID"]);
+
+ DataRelation orderDetailRel = thisDataSet.Relations.Add("OrderDetail",
+  thisDataSet.Tables["Orders"].Columns["OrderID"],
+  thisDataSet.Tables["Order Details"].Columns["OrderID"]);
+
+ DataRelation orderProductRel = thisDataSet.Relations.Add("OrderProducts",
+  thisDataSet.Tables["Products"].Columns["ProductID"],
+  thisDataSet.Tables["Order Details"].Columns["ProductID"]);
+
+ foreach (DataRow custRow in thisDataSet.Tables["Customers"].Rows)
+ {
+  Console.WriteLine("Customer ID: " + custRow["CustomerID"]);
+  foreach (DataRow orderRow in custRow.GetChildRows(custOrderRel))
+  {
+  Console.WriteLine("\tOrder ID: " + orderRow["OrderID"]);
+  Console.WriteLine("\t\tOrder Date: " + orderRow["OrderDate"]);
+  foreach (DataRow detailRow in orderRow.GetChildRows(orderDetailRel))
+  {
+   Console.WriteLine("\t\tProduct: " + 
+   detailRow.GetParentRow(orderProductRel)["ProductName"]);
+   Console.WriteLine("\t\tQuantity: " + detailRow["Quantity"]);
+  }
+  }
+ }
+
+ thisConnection.Close();
+ }
+}
+Exercise 8
+	Q.	Modify the program shown to print out UPDATE, INSERT, and DELETE statements to use "SELECT * FROM Customers" as the SQL SELECT command. Note the complexity of the generated statements.
+	A.	
+using System;
+using System.Data;
+using System.Data.SqlClient;
+
+class Chapter28_Exercise_8
+{
+ public static void Main() 
+ {
+   SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+
+ thisConnection.Open();
+
+ SqlDataAdapter thisAdapter = new 
+  SqlDataAdapter("SELECT * from Customers", thisConnection);
+
+ SqlCommandBuilder thisBuilder = new SqlCommandBuilder(thisAdapter);
+
+ Console.WriteLine("SQL SELECT Command is:\n{0}\n", 
+  thisAdapter.SelectCommand.CommandText);
+
+ SqlCommand updateCommand = thisBuilder.GetUpdateCommand();
+ Console.WriteLine("SQL UPDATE Command is:\n{0}\n", 
+  updateCommand.CommandText);
+
+ SqlCommand insertCommand = thisBuilder.GetInsertCommand();
+ Console.WriteLine("SQL INSERT Command is:\n{0}\n", 
+  insertCommand.CommandText);
+
+ SqlCommand deleteCommand = thisBuilder.GetDeleteCommand();
+ Console.WriteLine("SQL DELETE Command is:\n{0}", 
+  deleteCommand.CommandText);
+
+ thisConnection.Close();
+ }
+}
+Exercise 9
+	Q.	Modify the LINQoverDataSet sample to use the Employees table in the Northwind database as with Exercise 1. Again, retrieve the EmployeeID and LastName columns. 
+	A.	
+using System;
+using System.Data;            // Use ADO.NET namespace
+using System.Data.SqlClient;  // Use SQL Server data provider namespace
+using System.Linq;      // Use LINQ / ADO.NET connector
+using System.Data.Common;
+class Chapter28_Exercise_9
+{
+    static void Main(string[] args) 
+   {
+      // Specify SQL Server-specific connection string
+     SqlConnection thisConnection = new SqlConnection(
+         @"Data Source=.\SQLEXPRESS;"+
+         @"AttachDbFilename='C:\SQL Server 2000 Sample Databases\NORTHWND.MDF';" +
+         @"Integrated Security=True;Connect Timeout=30;User Instance=true" );
+
+      // Create DataAdapter object for update and other operations
+      SqlDataAdapter thisAdapter = new SqlDataAdapter(
+            "SELECT EmployeeID, LastName FROM Employees", thisConnection);
+      // Create CommandBuilder object to build SQL commands
+      SqlCommandBuilder thisBuilder = new SqlCommandBuilder(thisAdapter);
+
+      // Create DataSet to contain related data tables, rows, and columns
+      DataSet thisDataSet = new DataSet();
+      // Set up DataAdapter objects for each table and fill
+      SqlDataAdapter custAdapter = new SqlDataAdapter(
+                 "SELECT * FROM Employees", thisConnection);
+      SqlDataAdapter orderAdapter = new SqlDataAdapter(
+                 "SELECT * FROM Orders", thisConnection);
+      custAdapter.Fill(thisDataSet, "Employees");
+      orderAdapter.Fill(thisDataSet, "Orders");
+
+      // Set up DataRelation between employees and orders
+      DataRelation custOrderRel = thisDataSet.Relations.Add("EmpOrders",
+                 thisDataSet.Tables["Employees"].Columns["EmployeeID"],
+                 thisDataSet.Tables["Orders"].Columns["EmployeeID"]);
+
+      var employees = thisDataSet.Tables["Employees"].AsEnumerable();
+      var orders = thisDataSet.Tables["Orders"].AsEnumerable();
+
+      var productiveEmployees =
+           from e in employees
+           where e.GetChildRows("EmpOrders").Length > 100
+           orderby e.GetChildRows("EmpOrders").Length
+           select e;
+
+      Console.WriteLine("Employees with > 100 orders:");
+      foreach (var employee in productiveEmployees)
+      {
+           Console.WriteLine("{0} orders: {1} {2}",
+           employee.GetChildRows("EmpOrders").Length,
+           employee["EmployeeID"], employee["LastName"]);
+      }
+      thisConnection.Close();
+      Console.Write("Program finished, press Enter/Return to continue:");
+      Console.ReadLine();
+   }
+}
+Chapter 29: LINQ to XML
+Exercise 1
+	Q.	Create the following XML document using LINQ to XML constructors:
+<employees>
+  <employee ID="1001" FirstName="Fred" LastName="Lancelot">
+    <Skills>
+      <Language>C#</Language>
+      <Math>Calculus</Math>
+    </Skills>
+  </employee>
+  <employee ID="2002" FirstName="Jerry" LastName="Garcia">
+    <Skills>
+      <Language>French</Language>
+      <Math>Business</Math>
+    </Skills>
+  </employee>
+</employees>
+	A.	Use the following code:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using System.Text;
+
+namespace BegVCSharp_29_exercise1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            XDocument xdoc = new XDocument(
+                new XElement("employees",
+                    new XElement("employee",
+                        new XAttribute("ID", "1001"),
+                        new XAttribute("FirstName", "Fred"),
+                        new XAttribute("LastName", "Lancelot"),
+                        new XElement("Skills",
+                            new XElement("Language", "C#"),
+                            new XElement("Math", "Calculus")
+                            )
+                      ),
+                    new XElement("employee",
+                        new XAttribute("ID", "2002"),
+                        new XAttribute("FirstName", "Jerry"),
+                        new XAttribute("LastName", "Garcia"),
+                        new XElement("Skills",
+                            new XElement("Language", "French"),
+                            new XElement("Math", "Business")
+                            )
+                      )
+                 )
+            );
+
+            Console.WriteLine(xdoc);
+
+            Console.Write("Program finished, press Enter/Return to continue:");
+            Console.ReadLine();
+
+        }
+    }
+}         
+Exercise 2
+	Q.	Write a query against the NorthwindCustomerOrders.xml file you created to find the oldest customers (customers with orders placed in the first year of Northwind operation, 1996).
+	A.	Use code similar to this:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using System.Text;
+
+namespace BegVCSharp_29_exercises
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string xmlFileName = 
+                @"C:\BegVCSharp\Chapter29\Xml\NorthwindCustomerOrders.xml";
+            XDocument customers = XDocument.Load(xmlFileName);
+
+
+            Console.WriteLine("Oldest customers: Companies with orders in 1996:");
+            var queryResults =
+                from c in customers.Descendants("customer")
+                where c.Descendants("order").Attributes("orderYear")
+                                             .Any(a => a.Value == "1996")
+                select c.Attribute("Company");
+
+            foreach (var item in queryResults)
+            {
+                Console.WriteLine(item);
+            }
+            Console.Write("Press Enter/Return to continue:");
+            Console.ReadLine();
+        }
+    }
+}
+Exercise 3
+	Q.	Write a query against the NorthwindCustomerOrders.xml file to find customers who have placed individual orders more than $10,000.
+	A.	Here’s the code:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using System.Text;
+
+namespace BegVCSharp_29_exercises
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string xmlFileName = 
+                       @"C:\BegVCSharp\Chapter29\Xml\NorthwindCustomerOrders.xml";
+            XDocument customers = XDocument.Load(xmlFileName);
+
+            Console.WriteLine(
+                   "Companies with individual orders totaling over $10,000");
+            var queryResults =
+                from c in customers.Descendants("order")
+                where Convert.ToDecimal(c.Attribute("orderTotal").Value) > 10000
+                select new { OrderID = c.Attribute("orderID"), 
+                             Company = c.Parent.Attribute("Company") };
+
+            foreach (var item in queryResults) 
+            {
+                Console.WriteLine(item);
+            }
+            Console.Write("Program finished, press Enter/Return to continue:");
+            Console.ReadLine();
+        }
+    }
+}
+Exercise 4
+	Q.	Write a query against the NorthwindCustomerOrders.xml file to find the lifetime highest-selling customers: i.e., companies with all orders totaling more than $100,000.
+	A.	Use the following code:
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using System.Text;
+
+namespace BegVCSharp_29_exercises
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string xmlFileName = 
+                @"C:\BegVCSharp\Chapter29\Xml\NorthwindCustomerOrders.xml";
+            XDocument customers = XDocument.Load(xmlFileName);
+
+            Console.WriteLine("Lifetime highest-selling customers: "+
+                 "Companies with all orders totaling over $100,000");
+            var queryResult =
+                from c in customers.Descendants("customer")
+                where c.Descendants("order").Attributes("orderTotal")
+                               .Sum(o => Convert.ToDecimal(o.Value)) > 100000
+                select c.Attribute("Company");
+
+            foreach (var item in queryResult) 
+            {
+                Console.WriteLine(item);
+            }
+            Console.Write("Press Enter/Return to continue:");
+            Console.ReadLine();
+        }
+    }
+Chapter 30: Attributes
+No exercises.
+Chapter 31: XML Documentation
+Exercise 1
+	Q.	Which of the following elements can you use in XML documentation?
+a.	<summary>
+b.	<usage>
+c.	<member>
+d.	<seealso>
+e.	<typeparamref>
+	A.	Technically, you can use whatever elements you like—the vocabulary is extensible to meet your own needs. However, only a, c, and d are among the recommended attributes for XML documentation.
+Exercise 2
+	Q.	Which top-level XML documentation tags would you use to document a property?
+	A.	You would use <summary> and <value>, and perhaps <remarks>, <permission>, and <seealso> for additional information, or <include> if the XML was external.
+Exercise 3
+	Q.	XML documentation is contained in C# source files. True or false?
+	A.	False—because you can use <include> to reference external XML.
+Exercise 4
+	Q.	What is the major disadvantage of adding XML documentation using a class diagram?
+	A.	Markup is escaped.
+Exercise 5
+	Q.	What do you need to do to ensure that other projects can make use of XML documentation in your class libraries?
+	A.	Compile with the XML Documentation File build option, and ensure that the IDE can find the XML documentation file relating to your assembly, either by leaving it in the same directory as the assembly, or placing it in a well-known location such as the GAC.
+ 
+Chapter 32: Networking
+Exercise 1
+	Q.	Extend the FTP client application that makes use of the FtpWebRequest and FtpWebResponse classes to not only download files from the FTP server, but also to allow uploading files to the server. Add one more button to the form with the Text property set to Upload File, use the OpenFileDialog to ask the user for a file to upload, and then send a request to the server. For uploading files the WebRequestMethods class offers the Ftp.UploadFile member.
+	A.	Uploading files to the FTP server is very similar to downloading files as you’ve already done in the method OnDownloadFile(). The differences are that the FTP method Ftp.UploadFile must be set and the file stream must be passed with the FTP request. You can see this code part following Stream requestStream = request.GetRequestStream(). With the answer from the server, the response stream is not needed, instead the status information can be shown with response.StatusDescription.
+if (openFileDialog.ShowDialog() == DialogResult.OK)
+{
+FtpWebResponse response = null;
+Stream inStream = null;
+Stream outStream = null;
+Uri baseUri = new Uri(textServer.Text);
+string filename =
+listFiles.SelectedValue.ToString().Trim();
+string fullFilename = serverDirectory + @"/" +
+filename;
+Uri uri = new Uri(baseUri, fullFilename);
+FtpWebRequest request =
+(FtpWebRequest)WebRequest.Create(uri);
+request.Credentials =
+new NetworkCredential(textUsername.Text,
+textPassword.Text);
+request.Method = WebRequestMethods.Ftp.UploadFile;
+request.UseBinary = checkBoxBinary.Checked;
+Stream requestStream = request.GetRequestStream();
+FileStream fs = File.Open(openFileDialog.FileName,
+FileMode.Open);
+byte[] buffer = new byte[8192];
+int i;
+while ((i = fs.Read(buffer, 0, buffer.Length)) > 0)
+{
+requestStream.Write(buffer, 0, i);
+}
+requestStream.Close();
+response = (FtpWebResponse)request.GetResponse();
+MessageBox.Show(response.StatusDescription);
+}
+Exercise 2
+	Q.	Modify the Picture server and client applications that use the TcpListener and TcpClient classes, so that it is possible to upload picture files from the client to the server.
+	A.	With the TcpListener and TcpClient applications that have been created in the chapter, a file stream was sent from the server to the client. Now it is the other way around. The client application needs an Upload button where the Click event handler opens an OpenFileDialog dialog to ask the user about which file to open.
+private void OnUploadFile(object sender, EventArgs e)
+{
+if (openFileDialog.ShowDialog() == DialogResult.OK)
+{
+		Similar to the OnDownloadPicture event handler, a connection must be opened to the server. Sending a file to the server, a new request command must be defined. Here the request command UPLOAD is used, where the filename and file content follow. The file is read with help of File and FileStream classes. The data that is read is written to the network stream to send it to the server.
+const int bufferSize = 8192;
+TcpClient client = new TcpClient();
+IPHostEntry host =
+Dns.GetHostEntry(Properties.Settings.Default.Server);
+client.Connect(host.AddressList[0],
+Properties.Settings.Default.ServerPort);
+NetworkStream clientStream = client.GetStream();
+FileInfo file = new FileInfo(openFileDialog.FileName);
+string request = "UPLOAD:" + file.Name + ":";
+byte[] requestBuffer = Encoding.ASCII.GetBytes(request);
+clientStream.Write(requestBuffer, 0,
+requestBuffer.Length);
+FileStream fileStream = file.OpenRead();
+byte[] buffer = new byte[bufferSize];
+int bytesRead = 0;
+do
+{
+bytesRead = fileStream.Read(buffer, 0, bufferSize);
+clientStream.Write(buffer, 0, bytesRead);
+} while (bytesRead > 0);
+fileStream.Close();
+clientStream.Close();
+client.Close();
+}
+}
+		The server application must be modified to accept larger streams from the client. Instead of reading the data just once, a do/while loop is added to read the data into a MemoryStream object.
+static void Main(string[] args)
+{
+System.Net.Sockets.TcpListener listener =
+new System.Net.Sockets.TcpListener(IPAddress.Any,
+Properties.Settings.Default.Port);
+listener.Start();
+while (true)
+{
+const int bufferSize = 512;
+TcpClient client = listener.AcceptTcpClient();
+NetworkStream clientStream = client.GetStream();
+MemoryStream memStream = new MemoryStream();
+byte[] buffer = new byte[bufferSize];
+int readBytes = 0;
+int offset = 0;
+do
+{
+readBytes = clientStream.Read(buffer, 0, bufferSize);
+memStream.Write(buffer, offset, readBytes);
+offset += readBytes;
+} while (readBytes > 0);
+		With the if/else sequence, a check for the UPLOAD command must be added. As defined with the request that is sent from the client, the filename follows the UPLOAD command. After the filename, the byte stream contains the content of the file. After separating the content of the request, the file is written to a directory that is defined with the application settings UploadDirectory.
+else if (request.StartsWith("UPLOAD"))
+{
+// get the filename
+string[] requestMessage = request.Split(':');
+string filename = requestMessage[1];
+// get index of second ':'
+int startStreamPosition = request.IndexOf(':', 7);
+string uploadDirectory =
+Properties.Settings.Default.UploadDirectory;
+FileStream stream =
+File.OpenWrite(Path.Combine(uploadDirectory,
+filename));
+byte[] data = memStream.ToArray();
+stream.Write(data, startStreamPosition + 1, data.Length
+–
+startStreamPosition - 1);
+stream.Close();
+}
+Chapter 33 Answers
+Exercise 1
+	Q.	Write a small application that attempts to inappropriately dispose of a Pen object that was obtained from the Pens class. Note the error message that result.
+	A.	See source code file 191354_Ch33_DisposalErrors.zip
+Exercise 2
+	Q.	Create an application that displays a three-color traffic light. Have the traffic light change color when the user clicks on it.
+	A.	See source code file 191354_ch33_TrafficLight.zip
+Exercise 3
+	Q.	Write an application that inputs RGB values. Display the color in a rectangle. Display the HSB values of the color.
+	A.	See source code file 191354_Ch33_ColorConverter.zip
+Chapter 34: Windows Presentation Foundation
+Exercise 1
+	Q.	You can use exactly the same XAML code for WPF desktop applications and WPF browser applications. True or false?
+	A.	False. Most of the code stays the same, but there are minor differences, such as having to use Page controls in WPF browser applications and Window controls in WPF desktop applications.
+Exercise 2
+	Q.	What technique would you use to allow child controls to set individual values for a property defined on a parent? What syntax would you use in XAML to achieve this? Give an XAML example where two child Branch controls set different values for a LeafCount property defined by a parent Tree control.
+	A.	You would use an attached property to do this. In XAML, attached properties are referred to using attribute syntax with a fully qualified attribute name of the form [ParentClassName].[AttributeName]. The following code shows an example of this:
+<Tree>
+  <Branch Tree.LeafCount="3" />
+  <Branch Tree.LeafCount="42" />
+</Tree>
+Exercise 3
+	Q.	Which of the following statements about dependency properties are true:
+a)	Dependency properties must be accessible through an associated .NET property.
+b)	Dependency properties are defined as public, static members.
+c)	You can only have one dependency property per class definition.
+d)	Dependency properties must be named using the naming convention [PropertyName]Property.
+e)	You can validate the values assigned to a dependency property with a callback method.
+	A.	Statements b and e are true.
+		a is wrong because .NET properties are optional; c is wrong because there is no limit on the dependency properties you can have for a class; and d is wrong because this is a best practice naming convention, not a requirement.
+Exercise 4
+	Q.	Which layout control would you use to display controls in a single row or column?
+	A.	You would use the StackPanel control.
+Exercise 5
+	Q.	Tunneling events in WPF are named in a specific way so that you can identify them. What is this naming convention?
+	A.	The naming convention is that the name of the tunneling event is the same as for the associated bubbing event, but with the prefix Preview.
+Exercise 6
+	Q.	What property types can be animated?
+	A.	Strictly speaking this is a trick question, as you can animate any property type. However, to animate property types other than double, Color, or Point you would have to create your own timeline classes, so it is generally a good idea to stick to these types.
+Exercise 7
+	Q.	When would you use a dynamic resource reference rather than a static resource reference?
+	A.	You use dynamic resource references to enable the resource reference to change at runtime, or when you don't know what the reference will be until run time.
+ 
+Chapter 35: Windows Communication Foundation
+Exercise 1
+	Q.	Which of the following applications can host WCF services?
+a)	Web applications.
+b)	Windows Forms applications.
+c)	Windows services.
+d)	COM+ applications.
+e)	Console applications.
+	A.	All of them—a, b, c, d, and e.
+Exercise 2
+	Q.	Which type of contract would you implement if you wanted to exchange parameters of type MyClass with a WCF service?
+	A.	A data contract, with the DataContractAttribute and DataMemberAttribute attributes.
+Exercise 3
+	Q.	If you host a WCF service in a Web application, what extension will the base endpoint for the service use?
+	A.	.svc.
+Exercise 4
+	Q.	When self-hosting WCF services you must configure the service by setting properties and calling methods of the ServiceHost class. True or false?
+	A.	That is one way of doing things, but it is usually easier to put all your WCF configuration in a separate configuration file, either Web.config or app.config.
+Exercise 5
+	Q.	Give the code for a service contract, IMusicPlayer, with operations defined for Play(), Stop(), and GetCurrentTrackInformation(). Use one-way methods where appropriate. What other contracts might you define for this service to work?
+	A.	
+[ServiceContract]
+public interface IMusicPlayer
+{
+   [OperationContract(IsOneWay=true)]
+   void Play();
+
+   [OperationContract(IsOneWay=true)]
+   void Stop();
+
+   [OperationContract]
+   TrackInformation GetCurrentTrackInformation();
+}
+		You might want a data contract to encapsulate track information, TrackInformation in this code.
+Chapter 36: Windows Workflow Foundation
+No exercises.
